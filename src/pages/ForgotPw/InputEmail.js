@@ -3,6 +3,7 @@ import {  Image,  ScrollView,  Text, View } from 'react-native'
 import { Button, Input } from '../../components'
 import { IconUsers } from '../../assets'
 import { colors } from '../../utils'
+import { BASE_URL } from '../../config'
 
 const InputEmail = ({navigation}) => {
    
@@ -16,7 +17,7 @@ const InputEmail = ({navigation}) => {
         if(form.email==''){
             alert('Silakan mengisi data dengan lengkap');
           }else{
-                var urlAksi = "http://192.168.43.91/api/api.php?op=input_email";
+                var urlAksi = BASE_URL+"api.php?op=input_email";
 
                 fetch(urlAksi,{
                     method:'post',

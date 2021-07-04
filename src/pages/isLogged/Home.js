@@ -6,6 +6,7 @@ import {  Search} from '../../assets'
 import StarRating from '../../components/StarRating';
 import { colors } from '../../utils'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { BASE_URL } from '../../config';
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();//Ignore all log notifications
 
@@ -250,7 +251,7 @@ const Home = ({navigation}) => {
             <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
               <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
               {foto_profil != null ? (
-                <Image style={{height:26, width:26}} source={{uri: 'http://192.168.43.91/api/uploads/'+foto_profil}}/>
+                <Image style={{height:26, width:26}} source={{uri: BASE_URL+'api/uploads/'+foto_profil}}/>
               ) : null}
 
             {foto_profil == null ? (

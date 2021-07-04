@@ -16,6 +16,7 @@ import files from '../../assets/filesBase64';
 
 import { cari, Aktivitas, alamat, edit, Help, HomeIcon, Ketentuan, privasi, riwayat, share, tentang, tgllahir, tlp, User, gantipw, alamatUser} from '../../assets';
 import { colors } from '../../utils';
+import { BASE_URL } from '../../config';
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -148,7 +149,7 @@ const Profile = ({navigation}) => {
         {foto_profil != null ? (
                  <Avatar.Image 
                  source={{
-                   uri: 'http://192.168.43.91/api/uploads/'+foto_profil,
+                   uri: BASE_URL+'api/uploads/'+foto_profil,
                  }}
                  size={80}
                />
@@ -290,7 +291,7 @@ const Profile = ({navigation}) => {
             <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
               <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
               {foto_profil != null ? (
-                <Image style={{height:26, width:26}} source={{uri: 'http://192.168.43.91/api/uploads/'+foto_profil}}/>
+                <Image style={{height:26, width:26}} source={{uri: BASE_URL+'api/uploads/'+foto_profil}}/>
               ) : null}
 
             {foto_profil == null ? (

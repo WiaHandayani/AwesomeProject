@@ -1,6 +1,7 @@
 import React, { useState} from 'react'
 import {   ScrollView,  Text, View } from 'react-native'
 import { Button, Input } from '../../components'
+import { BASE_URL } from '../../config'
 import { colors } from '../../utils'
 
 const InputOtp = ({navigation, route}) => {
@@ -16,7 +17,7 @@ const InputOtp = ({navigation, route}) => {
         if(form.otp==''){
             alert('Kode OTP harus diisi');
           }else{
-                var urlAksi = "http://192.168.43.91/api/api.php?op=input_otp";
+                var urlAksi = BASE_URL+"api.php?op=input_otp";
 
                 fetch(urlAksi,{
                     method:'post',

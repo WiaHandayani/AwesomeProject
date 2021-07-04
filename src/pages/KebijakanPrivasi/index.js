@@ -11,6 +11,7 @@ import {
 
 import { Aktivitas, HomeIcon, riwayat, User, cari, kembali, alamatUser, tlp, Inbox } from '../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { BASE_URL } from '../../config';
 
 const KebijakanPrivasi = ({navigation}) => {
   const [foto_profil, setfoto_profil] = useState('');
@@ -172,7 +173,7 @@ return (
             <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
               <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
               {foto_profil != null ? (
-                <Image style={{height:26, width:26}} source={{uri: 'http://192.168.43.91/api/uploads/'+foto_profil}}/>
+                <Image style={{height:26, width:26}} source={{uri: BASE_URL+'api/uploads/'+foto_profil}}/>
               ) : null}
 
             {foto_profil == null ? (

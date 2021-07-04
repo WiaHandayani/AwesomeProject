@@ -7,189 +7,209 @@ import {
   Image,
   ScrollView,
   StatusBar,
-  TextInput, 
-  FlatList
+  TextInput,
+  FlatList,
 } from 'react-native';
 
 import StarRating from '../../components/StarRating';
-import { colors } from '../../utils';
-import { Aktivitas, HomeIcon, riwayat, User, cari, Search } from '../../assets';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import {colors} from '../../utils';
+import {Aktivitas, HomeIcon, riwayat, User, cari, Search} from '../../assets';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BASE_URL} from '../../config';
 
 const Cari = ({navigation}) => {
-    const [foto_profil, setfoto_profil] = useState('');
-    const [nama_usaha, setnama_usaha] = useState('');
-    const [listdata, setlistdata] = useState([]);
-    const [newlistdata, setnewlistdata] = useState([]);
-    useEffect(() =>{
-        const getfoto_profil = () => {
-            AsyncStorage.getItem('foto_profil')
-            .then((foto_profil) => {
-                setfoto_profil(foto_profil);
-            }) 
-        }
-        getfoto_profil()
+  const [foto_profil, setfoto_profil] = useState('');
+  const [nama_usaha, setnama_usaha] = useState('');
+  const [listdata, setlistdata] = useState([]);
+  const [newlistdata, setnewlistdata] = useState([]);
+  useEffect(() => {
+    const getfoto_profil = () => {
+      AsyncStorage.getItem('foto_profil').then((foto_profil) => {
+        setfoto_profil(foto_profil);
+      });
+    };
+    getfoto_profil();
+  }, []);
+
+  useEffect(() => {
+    var urlAksi = BASE_URL + 'api.php?op=cari_salonbarber';
+
+    fetch(urlAksi, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: '',
     })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setlistdata(responseJson);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }, []);
 
+  function CariData(value) {
+    var urlAksi = BASE_URL + 'api.php?op=cari';
 
-    useEffect(() =>  {
-              var urlAksi = "http://192.168.43.91/api/api.php?op=cari_salonbarber";
+    fetch(urlAksi, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'nama_usaha=' + value,
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setlistdata([]);
+        setlistdata(responseJson);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
 
-              fetch(urlAksi,{
-                  method:'get',
-                  headers:{
-                      'Content-Type':'application/json'
-                  },
-                  body:""
-              })
-              .then((response)=>response.json())
-              .then((responseJson)=>{
-                  setlistdata(responseJson);
-                
-                  
-                   
-               })
-               .catch((error)=>{
-                  console.log(error.message);
-                  
-               });
-          
-               
-              });
+  return (
+    <View style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView>
+        <StatusBar backgroundColor="#4169E1" barStyle="light-content" />
+        <View style={{flex: 1, backgroundColor: 'white'}}>
+          <View style={{flex: 1, backgroundColor: 'white'}}>
+            <View style={{backgroundColor: '#4169E1', height: 130}}>
+              <Text style={styles.text_header}>
+                GetHaircut Application - Pencarian
+              </Text>
+              <View style={{height: 4}} />
+              <View
+                style={{
+                  marginHorizontal: 17,
+                  flexDirection: 'row',
+                  paddingTop: 15,
+                }}>
+                <View style={{position: 'relative', flex: 1}}>
+                  <TextInput
+                    placeholder="Mau cari salon/barbershop apa?"
+                    style={{
+                      borderWidth: 1,
+                      borderColor: '#E8E8E8',
+                      borderRadius: 25,
+                      height: 40,
+                      fontSize: 13,
+                      paddingLeft: 45,
+                      paddingRight: 20,
+                      backgroundColor: 'white',
+                      marginRight: 18,
+                    }}
+                    onChangeText={(value) => CariData(value)}
+                  />
 
-        function Cari(value){
-          var urlAksi = "http://192.168.43.91/api/api.php?op=cari";
-
-          fetch(urlAksi,{
-              method:'post',
-              headers:{
-                  'Content-Type':'application/x-www-form-urlencoded'
-              },
-              body:"nama_usaha="+value
-          })
-          .then((response)=>response.json())
-          .then((responseJson)=>{
-           
-            setlistdata([]);
-            setlistdata(responseJson);
-            
-           })
-           .catch((error)=>{
-              console.log(error.message);
-              
-           });
-        }
-
-
-return (  
-      <View style={{flex:1}}>
-          <ScrollView>
-          <StatusBar backgroundColor='#4169E1' barStyle="light-content"/> 
-          <View style={{flex:1, backgroundColor:'white'}}>
-            <View style={{flex:1, backgroundColor:'white'}}>
-            <View style={{backgroundColor:'#4169E1',height:130}}>
-            <Text style={styles.text_header}>GetHaircut Application - Pencarian</Text>
-            <View style={{height:4}}/>
-                <View style={{marginHorizontal: 17, flexDirection:'row', paddingTop:15}}>
-                    <View style={{position: 'relative', flex:1}}>
-                        <TextInput placeholder="Mau cari salon/barbershop apa?" style={{borderWidth:1, borderColor:'#E8E8E8', 
-                        borderRadius:25, height:40, fontSize:13, paddingLeft:45, paddingRight:20, backgroundColor:'white',
-                        marginRight:18}} onChangeText={(value)=>Cari(value)}/>
-                        
-                        <Image source={Search} style={{position: 'absolute', height:26, width:26, top:5, left:12}}/>
-
-                    </View>
+                  <Image
+                    source={Search}
+                    style={{
+                      position: 'absolute',
+                      height: 26,
+                      width: 26,
+                      top: 5,
+                      left: 12,
+                    }}
+                  />
                 </View>
+              </View>
             </View>
-            </View>
-
-
-   
-     
-
-      <View style={{height:12}} />
-     
-      {
-      listdata.map((val, index)=>(
-        <FlatList
-        data={val}
-        renderItem={({val}) => 
-      
-      <View style={styles.cardsWrapper} key={index}>
-        <TouchableOpacity>
-          <View style={styles.card}>
-            <View style={styles.cardImgWrapper}>
-              <Image
-                source={{uri: 'http://192.168.43.91/api/foto_usaha/'+val.foto_profil}}
-                resizeMode="cover"
-                style={styles.cardImg}
-              />
-            </View>
-          <View style={styles.cardInfo}>
-            <Text style={styles.cardTitle}>{val.nama_usaha}</Text>
-            <StarRating ratings={4} reviews={99} />
-            
-                  <Text style={styles.cardDetails} key={index}>
-                    {val.alamat}
-                  </Text>
-            
           </View>
+
+          <View style={{height: 12}} />
+
+          <FlatList
+            data={listdata}
+            keyExtractor={(item, index) => index}
+            renderItem={({item}) => (
+              <View style={styles.cardsWrapper}>
+                <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+                  <View style={styles.cardImgWrapper}>
+                    <Image
+                      source={{
+                        uri: BASE_URL + 'foto_usaha/' + item.foto_profil,
+                      }}
+                      resizeMode="cover"
+                      style={styles.cardImg}
+                    />
+                  </View>
+                  <View style={styles.cardInfo}>
+                    <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
+                    <StarRating ratings={4} reviews={99} />
+
+                    <Text style={styles.cardDetails} numberOfLines={3}>
+                      {item.alamat}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+          />
         </View>
-        </TouchableOpacity>
+      </ScrollView>
 
-      </View> 
-      }
-      />
-      )
-      )}
-
-
-   
-      </View>
-      
-  
-          </ScrollView>
-        
-        <View style={{height:54, flexDirection:'row'}}>
-            <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Home')} >
-                    <Image source={HomeIcon} style={{height:26, width:35}}/>
-                    <Text style={{fontSize:12, color:'#545454', color:'#545454', marginTop:4}}>Beranda</Text>
-                    </TouchableOpacity>
-            </View>
-            <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity onPress={() => navigation.navigate('AktivitasScreen')} >
-                    <Image style={{height:26, width:26}} source={Aktivitas}/>
-                    <Text style={{fontSize:12, color:'#545454', marginTop:4}}>Aktivitas</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Cari')} >
-                    <Image style={{height:28, width:28}} source={cari}/>
-                    <Text style={{fontSize:12, color:colors.default, marginTop:4}}>Cari</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-              <TouchableOpacity onPress={() => navigation.navigate('Riwayat')} >
-                <Image style={{height:26, width:26}} source={riwayat}/>
-                <Text style={{fontSize:12, color:'#545454', marginTop:4}}>Riwayat</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
-              <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-              {foto_profil != null ? (
-                <Image style={{height:26, width:26}} source={{uri: 'http://192.168.43.91/api/uploads/'+foto_profil}}/>
-              ) : null}
+      <View style={{height: 54, flexDirection: 'row'}}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image source={HomeIcon} style={{height: 26, width: 35}} />
+            <Text
+              style={{
+                fontSize: 12,
+                color: '#545454',
+                color: '#545454',
+                marginTop: 4,
+              }}>
+              Beranda
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AktivitasScreen')}>
+            <Image style={{height: 26, width: 26}} source={Aktivitas} />
+            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+              Aktivitas
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cari')}>
+            <Image style={{height: 28, width: 28}} source={cari} />
+            <Text style={{fontSize: 12, color: colors.default, marginTop: 4}}>
+              Cari
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
+            <Image style={{height: 26, width: 26}} source={riwayat} />
+            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+              Riwayat
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            {foto_profil != null ? (
+              <Image
+                style={{height: 26, width: 26}}
+                source={{uri: BASE_URL + 'api/uploads/' + foto_profil}}
+              />
+            ) : null}
 
             {foto_profil == null ? (
-                <Image style={{height:26, width:26}} source={User}/>
-              ) : null}
-                <Text style={{fontSize:12, color:'#545454', marginTop:4}}>Akun</Text>
-              </TouchableOpacity>
-            </View>
+              <Image style={{height: 26, width: 26}} source={User} />
+            ) : null}
+            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+              Akun
+            </Text>
+          </TouchableOpacity>
         </View>
+      </View>
     </View>
-    
   );
 };
 
@@ -234,7 +254,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     left: 25,
-    marginTop:25
+    marginTop: 25,
   },
   cardsWrapper: {
     marginTop: 20,
@@ -250,6 +270,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
+    borderWidth: 1,
+    borderRadius: 7,
+    borderColor: '#1E90FF',
   },
   cardImgWrapper: {
     flex: 1,
@@ -264,12 +287,11 @@ const styles = StyleSheet.create({
   },
   cardInfo: {
     flex: 2,
-    padding: 10,
-    borderColor: '#1E90FF',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderBottomRightRadius: 8,
-    borderTopRightRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderTopRightRadius: 7,
+    borderBottomRightRadius: 7,
+    // padding: 10,
     backgroundColor: '#fff',
   },
   cardTitle: {

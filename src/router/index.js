@@ -41,6 +41,7 @@ import InputOtp from '../pages/ForgotPw/InputOtp';
 import InputPw from '../pages/ForgotPw/InputPw';
 import Barbershop from '../pages/TampilinData/Barbershop';
 import Salon from '../pages/TampilinData/Salon';
+import { DetailBarbershop } from '../pages/Barbershop';
 
 
 
@@ -87,6 +88,7 @@ function Router() {
             <Stack.Screen name="InputEmail" component={InputEmail} options={{headerShown:false}}/>
             <Stack.Screen name="InputPw" component={InputPw} options={{headerShown:false}}/>
             <Stack.Screen name="Barbershop" component={Barbershop} options={{headerShown:false}}/>
+            <Stack.Screen name="DetailBarbershop" component={DetailBarbershop} options={{headerShown:false}}/>
             <Stack.Screen name="Salon" component={Salon} options={{headerShown:false}}/>
         </Stack.Navigator>
     );

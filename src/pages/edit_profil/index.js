@@ -18,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { colors } from '../../utils'
 import DocumentPicker from 'react-native-document-picker';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import { BASE_URL } from '../../config';
 
 const edit_profil = ({navigation, route}) => {
 
@@ -40,7 +41,7 @@ const edit_profil = ({navigation, route}) => {
         if(form.nama==''){
             alert('data harus diisi');
           }else{
-                var urlAksi = "http://192.168.43.91/api/api.php?op=update";
+                var urlAksi = BASE_URL+"api.php?op=update";
                 const fileToUpload = singleFile;
                 const data = new FormData();
                 data.append('id_user', route.params.id_user);
@@ -143,7 +144,7 @@ const edit_profil = ({navigation, route}) => {
       {singleFile.uri == null ? (
     <Avatar.Image 
       source={{
-        uri: 'http://192.168.43.91/api/uploads/'+form.foto_profil,
+        uri: BASE_URL+'api/uploads/'+form.foto_profil,
       }}
       size={80}
     />

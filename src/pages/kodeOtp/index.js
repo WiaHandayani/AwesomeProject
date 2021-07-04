@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
+import { BASE_URL } from '../../config';
 import { colors } from '../../utils'
 
 const kodeOtp = ({navigation, route}) => {
@@ -24,7 +25,7 @@ const kodeOtp = ({navigation, route}) => {
         if(form.otp==''){
             alert('Kode OTP harus diisi');
           }else{
-                var urlAksi = "http://192.168.43.91/api/api.php?op=cek_otp";
+                var urlAksi = BASE_URL+"api.php?op=cek_otp";
 
                 fetch(urlAksi,{
                     method:'post',

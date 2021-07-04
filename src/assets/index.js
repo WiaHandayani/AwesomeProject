@@ -1,0 +1,46 @@
+//Illustration
+import logo from './image/logo.png'
+import depan from './image/depan.png'
+import IconUsers from './image/users5.png'
+import IconLogin from './image/login.png'
+//Icon
+import IconBack from './icon/back.png'
+import HomeIcon from './icon/home.png'
+import Order from './icon/order.png'
+import Help from './icon/help.png'
+import Setting from './icon/setting.png'
+import Inbox from './icon/inbox.png'
+import Search from './icon/search.png'
+import Promo from './icon/promo.png'
+import User from './icon/user.png'
+import Aktivitas from './icon/aktivitas.png'
+import riwayat from './icon/riwayat.png'
+import banner_1 from './image/crbn.jpg'
+import banner_2 from './image/brbrshp.jpg'
+import banner_3 from './image/salon.jpg'
+import cewek from './icon/cewek.png'
+import cowok from './icon/cowok.png'
+import love from './icon/love.png'
+import mata from './icon/mata.png'
+import uang from './icon/uang.png'
+import showmore from './icon/showmore.png'
+import pin from './icon/pin.png'
+import car from './icon/car.png'
+import edit from './icon/edit.png'
+import alamatUser from './icon/addres.jpg'
+import tgllahir from './icon/tgllahir.png'
+import tlp from './icon/tlp.jpg'
+import tentang from './icon/tentang.png'
+import Ketentuan from './icon/ketentuan.jpg'
+import privasi from './icon/privasi.png'
+import share from './icon/share.jpg'
+import cari from './icon/cari.jpg'
+import gantipw from './icon/gantipw.png'
+import chevron from './icon/chevron.png'
+import kembali from './icon/kembali.png'
+
+export {logo, IconBack, IconUsers, IconLogin, HomeIcon, Order, 
+    Help, Setting, Inbox, Search, Promo, User, Aktivitas, riwayat, 
+    depan, banner_1, banner_2, banner_3, cewek, cowok, love, mata, uang, showmore, pin, 
+    car, edit, alamatUser, tgllahir, tlp, tentang, Ketentuan, privasi, share, cari, gantipw, 
+    chevron, kembali};

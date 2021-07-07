@@ -126,7 +126,7 @@ const Cari = ({navigation}) => {
             keyExtractor={(item, index) => index}
             renderItem={({item}) => (
               <View style={styles.cardsWrapper}>
-                <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+                <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DetailBarbershop', {item: item})} activeOpacity={0.8}>
                   <View style={styles.cardImgWrapper}>
                     <Image
                       source={{

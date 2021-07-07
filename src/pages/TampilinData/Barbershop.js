@@ -28,6 +28,28 @@ const Barbershop = ({navigation}) => {
     getfoto_profil();
   });
 
+  function CariData(value) {
+    var urlAksi = BASE_URL + 'api.php?op=cari_barber';
+
+    fetch(urlAksi, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'nama_usaha=' + value,
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson) {
+          setlistdata([]);
+          setlistdata(responseJson);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
+
   useEffect(() => {
     var urlAksi = BASE_URL + 'api.php?op=barber';
 
@@ -45,7 +67,7 @@ const Barbershop = ({navigation}) => {
       .catch((error) => {
         console.log(error.message);
       });
-  });
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -76,6 +98,7 @@ const Barbershop = ({navigation}) => {
                   backgroundColor: 'white',
                   marginRight: 18,
                 }}
+                onChangeText={(value) => CariData(value)}
               />
               <Image
                 source={Search}
@@ -95,7 +118,7 @@ const Barbershop = ({navigation}) => {
 
           {listdata.map((val, index) => (
             <View style={styles.cardsWrapper} key={index}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('DetailBarbershop', {item: val})} activeOpacity={0.8}>
                 <View style={styles.card}>
                   <View style={styles.cardImgWrapper}>
                     <Image

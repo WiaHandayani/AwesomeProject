@@ -26,8 +26,28 @@ const Salon = ({navigation}) => {
       });
     };
     getfoto_profil();
-  });
+  }, []);
+  function CariData(value) {
+    var urlAksi = BASE_URL + 'api.php?op=cari_salon';
 
+    fetch(urlAksi, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'nama_usaha=' + value,
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson) {
+          setlistdata([]);
+          setlistdata(responseJson);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
   useEffect(() => {
     var urlAksi = BASE_URL+'/api.php?op=salon';
 
@@ -45,7 +65,7 @@ const Salon = ({navigation}) => {
       .catch((error) => {
         console.log(error.message);
       });
-  });
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -74,6 +94,7 @@ const Salon = ({navigation}) => {
                   backgroundColor: 'white',
                   marginRight: 18,
                 }}
+                onChangeText={(value) => CariData(value)}
               />
               <Image
                 source={Search}

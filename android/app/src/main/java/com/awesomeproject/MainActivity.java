@@ -1,4 +1,4 @@
-package com.awesomeproject;
+package com.gethaircut;
 
 import com.facebook.react.ReactActivity;
 

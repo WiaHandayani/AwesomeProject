@@ -7,101 +7,124 @@ import {
   Image,
   ScrollView,
   StatusBar,
-  TextInput
+  TextInput,
 } from 'react-native';
 
 import StarRating from '../../components/StarRating';
-import { colors } from '../../utils';
-import { Aktivitas, HomeIcon, riwayat, User, cari, Search } from '../../assets';
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { BASE_URL } from '../../config';
+import {colors} from '../../utils';
+import {Aktivitas, HomeIcon, riwayat, User, cari, Search} from '../../assets';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BASE_URL} from '../../config';
 
 const AktivitasScreen = ({navigation}) => {
+  const [foto_profil, setfoto_profil] = useState('');
+  const [item, setItem] = useState({
+    foto_profil: 'anna-salon.jpg',
+    nama_usaha: 'Nama usaha',
+    alamat: 'alamat usaha'
+  })
+  useEffect(() => {
+    const getfoto_profil = () => {
+      AsyncStorage.getItem('foto_profil').then((foto_profil) => {
+        setfoto_profil(foto_profil);
+      });
+    };
+    getfoto_profil();
+  });
 
-    const [foto_profil, setfoto_profil] = useState('');
-    useEffect(() =>{
-        const getfoto_profil = () => {
-            AsyncStorage.getItem('foto_profil')
-            .then((foto_profil) => {
-                setfoto_profil(foto_profil);
-            }) 
-        }
-        getfoto_profil()
-    })
-
-return (  
-   
-      <View style={{flex:1}}>
-          <ScrollView>
-          <StatusBar backgroundColor='#4169E1' barStyle="light-content"/> 
-          <View style={{flex:1, backgroundColor:'white'}}>
-            <View style={{backgroundColor:'#4169E1',height:70}}>
-            <Text style={styles.text_header}>GetHaircut Application - Aktivitas</Text>
-            </View>
-      <View style={{height:12}}/> 
-      <View style={styles.cardsWrapper}>
-        <TouchableOpacity>
-          <View style={styles.card}>
-            <View style={styles.cardImgWrapper}>
-              <Image
-                source={require('../../assets/icon/food-banner2.jpg')}
-                resizeMode="cover"
-                style={styles.cardImg}
-              />
-            </View>
-          <View style={styles.cardInfo}>
-            <Text style={styles.cardTitle}>Amazing Food Place</Text>
-            <StarRating ratings={4} reviews={99} />
-            <Text style={styles.cardDetails}>
-              Amazing description for this amazing place
+  return (
+    <View style={{flex: 1}}>
+      <ScrollView>
+        <StatusBar backgroundColor="#4169E1" barStyle="light-content" />
+        <View style={{flex: 1, backgroundColor: 'white'}}>
+          <View style={{backgroundColor: '#4169E1', height: 70}}>
+            <Text style={styles.text_header}>
+              GetHaircut Application - Aktivitas
             </Text>
           </View>
+          <View style={{height: 12}} />
+          <View style={styles.cardsWrapper}>
+            <TouchableOpacity onPress={() => navigation.navigate('DetailBarbershop', {item: item}) }>
+              <View style={styles.card}>
+                <View style={styles.cardImgWrapper}>
+                  <Image
+                    source={require('../../assets/icon/food-banner2.jpg')}
+                    resizeMode="cover"
+                    style={styles.cardImg}
+                  />
+                </View>
+                <View style={styles.cardInfo}>
+                  <Text style={styles.cardTitle}>Amazing Food Place</Text>
+                  <StarRating ratings={4} reviews={99} />
+                  <Text style={styles.cardDetails}>
+                    Amazing description for this amazing place
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-        </TouchableOpacity>
-      </View> 
-      </View>
-          </ScrollView>
-        
-        <View style={{height:54, flexDirection:'row'}}>
-            <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Home')} >
-                    <Image source={HomeIcon} style={{height:26, width:35}}/>
-                    <Text style={{fontSize:12, color:'#545454', color:'#545454', marginTop:4}}>Beranda</Text>
-                    </TouchableOpacity>
-            </View>
-            <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity onPress={() => navigation.navigate('AktivitasScreen')} >
-                    <Image style={{height:26, width:26}} source={Aktivitas}/>
-                    <Text style={{fontSize:12, color:'#545454', marginTop:4}}>Aktivitas</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
-                <TouchableOpacity onPress={() => navigation.navigate('Cari')} >
-                    <Image style={{height:28, width:28}} source={cari}/>
-                    <Text style={{fontSize:12, color:colors.default, marginTop:4}}>Cari</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-              <TouchableOpacity onPress={() => navigation.navigate('Riwayat')} >
-                <Image style={{height:26, width:26}} source={riwayat}/>
-                <Text style={{fontSize:12, color:'#545454', marginTop:4}}>Riwayat</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
-              <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-              {foto_profil != null ? (
-                <Image style={{height:26, width:26}} source={{uri: BASE_URL+'api/uploads/'+foto_profil}}/>
-              ) : null}
+      </ScrollView>
+
+      <View style={{height: 54, flexDirection: 'row'}}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image source={HomeIcon} style={{height: 26, width: 35}} />
+            <Text
+              style={{
+                fontSize: 12,
+                color: '#545454',
+                color: '#545454',
+                marginTop: 4,
+              }}>
+              Beranda
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AktivitasScreen')}>
+            <Image style={{height: 26, width: 26}} source={Aktivitas} />
+            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+              Aktivitas
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cari')}>
+            <Image style={{height: 28, width: 28}} source={cari} />
+            <Text style={{fontSize: 12, color: colors.default, marginTop: 4}}>
+              Cari
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
+            <Image style={{height: 26, width: 26}} source={riwayat} />
+            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+              Riwayat
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            {foto_profil != null ? (
+              <Image
+                style={{height: 26, width: 26}}
+                source={{uri: BASE_URL + 'api/uploads/' + foto_profil}}
+              />
+            ) : null}
 
             {foto_profil == null ? (
-                <Image style={{height:26, width:26}} source={User}/>
-              ) : null}
-                <Text style={{fontSize:12, color:'#545454', marginTop:4}}>Akun</Text>
-              </TouchableOpacity>
-            </View>
+              <Image style={{height: 26, width: 26}} source={User} />
+            ) : null}
+            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+              Akun
+            </Text>
+          </TouchableOpacity>
         </View>
+      </View>
     </View>
-    
   );
 };
 
@@ -146,7 +169,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     left: 25,
-    marginTop:25
+    marginTop: 25,
   },
   cardsWrapper: {
     marginTop: 10,
@@ -184,7 +207,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontWeight: 'bold',
-    color: '#4169E1'
+    color: '#4169E1',
   },
   cardDetails: {
     fontSize: 12,

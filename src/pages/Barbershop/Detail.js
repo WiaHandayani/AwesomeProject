@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {StyleSheet, Text, View, Image, SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, Image, SafeAreaView, Alert, ScrollView, TouchableOpacity} from 'react-native';
 import { BASE_URL } from '../../config';
+
 
 export default function Detail({ route }) {
   const [item, setItem] = useState([])
@@ -12,6 +13,20 @@ export default function Detail({ route }) {
     setListPelayanan([1, 2, 3, 4, 5, 6])
   }, [])
 
+  const pesanPelayanan = () => (
+    Alert.alert(
+      "",
+      "Ingin memesan layanan ini",
+      [
+        {
+          text: "TIdak",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Ya", onPress: () => alert('Pesanan berhasil ditambahkan, mohon menunggu konfirmasi dari pihak penyedia layanan') }
+      ]
+    )
+  )
   
   const TabBar = (props) => {
     
@@ -42,7 +57,7 @@ export default function Detail({ route }) {
           <TabBar>
             {tabBarActive == 1 ? 
               listPelayanan.map(item => (
-                <TouchableOpacity activeOpacity={0.8} style={styles.wrapperPelayanan}>
+                <TouchableOpacity onPress={pesanPelayanan} activeOpacity={0.8} style={styles.wrapperPelayanan}>
                   {/* ini bisa diganti sama gambar */}
                   <View style={styles.pelayananImage} /> 
                   {/* ini bisa diganti sama gambar */}

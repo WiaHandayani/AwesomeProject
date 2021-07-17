@@ -42,6 +42,7 @@ import InputPw from '../pages/ForgotPw/InputPw';
 import Barbershop from '../pages/TampilinData/Barbershop';
 import Salon from '../pages/TampilinData/Salon';
 import { DetailBarbershop } from '../pages/Barbershop';
+import PaketHemat from '../pages/isLogged/PaketHemat';
 
 
 
@@ -55,6 +56,7 @@ function Router() {
             <Stack.Screen name="kodeOtp" component={kodeOtp} options={{headerShown:false}}/>
             <Stack.Screen name="signup" component={signup} options={{headerShown:false}}/>
             <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
+            <Stack.Screen name="PaketHemat" component={PaketHemat} options={{headerShown:false}}/>
             <Stack.Screen name="inputRegistrasi" component={inputRegistrasi} options={{headerShown:false}}/>
             <Stack.Screen name="maps" component={Maps} options={{headerShown:false}}/>
             <Stack.Screen name="welcome" component={Welcome} options={{headerShown:false}}/>

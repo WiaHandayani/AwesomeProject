@@ -33,21 +33,26 @@ import StarRating from '../../components/StarRating';
 import {colors} from '../../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../config';
-// import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import axios from 'axios';
 // import RNGooglePlaces from 'react-native-google-places';
 
-LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs(); //Ignore all log notifications
+// LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+// LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
 const Home = ({navigation}) => {
+  const [lastVisited, setLastVisited] = useState([]);
+
   const [refreshing, setRefreshing] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    getLastVisited();
     wait(1000).then(() => setRefreshing(false));
   }, []);
 
@@ -63,6 +68,7 @@ const Home = ({navigation}) => {
 
   const [foto_profil, setfoto_profil] = useState('');
   useEffect(() => {
+    getLastVisited();
     const getfoto_profil = () => {
       AsyncStorage.getItem('foto_profil').then((foto_profil) => {
         setfoto_profil(foto_profil);
@@ -70,6 +76,37 @@ const Home = ({navigation}) => {
     };
     getfoto_profil();
   }, []);
+
+  const getLastVisited = async () => {
+    setRefreshing(true);
+    try {
+      let params = {
+        id_user: await AsyncStorage.getItem('id_user'),
+      };
+
+      let formData = Object.keys(params)
+        .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+        .join('&');
+
+      let response = await axios.post(
+        BASE_URL + 'api.php?op=lastvisited',
+        formData,
+        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}},
+      );
+
+      console.log("SUCCESS FETCH LAST VISITED");
+
+      let {success, data} = response.data;
+
+      if (success) {
+        setLastVisited(data);
+      }
+      setRefreshing(false);
+    } catch (error) {
+      console.log('ERROR FETCH LAST VISITED : ', error);
+      setRefreshing(false);
+    }
+  };
 
   const openSearchModal = () => {
     // RNGooglePlaces.openAutocompleteModal()
@@ -81,9 +118,53 @@ const Home = ({navigation}) => {
     //   .catch((error) => console.log(error.message)); // error is a Javascript Error object
   };
 
+  const LastVisit = () => {
+    return lastVisited.length ? (
+      lastVisited.map((item, key) => (
+        <TouchableOpacity onPress={() => navigation.navigate('DetailBarbershop', {item: item})} key={key}>
+          <View style={styles.card}>
+            <View style={styles.cardImgWrapper}>
+              <Image
+                source={{uri: BASE_URL + item.foto_profil}}
+                resizeMode="cover"
+                style={styles.cardImg}
+              />
+            </View>
+            <View style={styles.cardInfo}>
+              <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
+              <Text style={[styles.cardDetails, {marginTop: 8}]} numberOfLines={3}>{item.alamat}</Text>
+              {/* <StarRating ratings={4} reviews={99} /> */}
+            </View>
+          </View>
+        </TouchableOpacity>
+      ))
+    ) : (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingVertical: 50,
+        }}>
+        <FontAwesome5Icon name="eye" size={100} color={colors.gray400} />
+        <Text
+          style={{
+            paddingTop: 10,
+            fontSize: 13,
+            textTransform: 'uppercase',
+            fontWeight: '700',
+            color: colors.gray500,
+          }}>
+          Belum ada terakhir di lihat
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View style={{flex: 1}}>
-      <View style={{backgroundColor: '#4169E1', height: 130}}>
+      <View
+        style={{backgroundColor: '#4169E1', minHeight: 130, paddingBottom: 14}}>
         <View style={{height: 8}} />
         <Text style={styles.text_header}>GetHaircut Application</Text>
         <View style={{height: 4}} />
@@ -94,26 +175,42 @@ const Home = ({navigation}) => {
             flexDirection: 'row',
             paddingTop: 15,
           }}>
-          <TouchableOpacity style={{position: 'relative', flex: 1}}>
-            {/* <GooglePlacesAutocomplete
-              placeholder="Search"
-              onPress={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
-                console.log(data, details);
-              }}
-              onFail={(error) => console.error(error)}
-              fetchDetails={true}
-              autoFillOnNotFound={true}
-              query={{
-                key: 'AIzaSyBYO8x3gZ8zBB5tN2pAHXGbuNcUcrSOpPU',
-                language: 'en',
-              }}
-              requestUrl={{
-                useOnPlatform: 'web', // or "all"
-                url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // or any proxy server that hits https://maps.googleapis.com/maps/api
-              }}
-            /> */}
-            <TextInput
+          {/* <TouchableOpacity style={{position: 'relative', flex: 1}}> */}
+          <GooglePlacesAutocomplete
+            placeholder="Search"
+            onPress={(data, details = null) => {
+              // 'details' is provided when fetchDetails = true
+              console.log(details.geometry.location);
+              navigation.navigate('RouteMapShop', {...{data, details}});
+            }}
+            onFail={(error) => console.error(error)}
+            fetchDetails={true}
+            autoFillOnNotFound={true}
+            query={{
+              key: 'AIzaSyAMwBbUtpCZDsC0DmEn0eYTuVnhOUIXkVc',
+              language: 'en',
+            }}
+            styles={{
+              textInput: {
+                height: 38,
+                color: '#5d5d5d',
+                fontSize: 16,
+              },
+              listView: {
+                zIndex: 9999,
+              },
+              poweredContainer: {
+                position: 'absolute',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                borderBottomRightRadius: 5,
+                borderBottomLeftRadius: 5,
+                borderColor: '#c8c7cc',
+                borderTopWidth: 0.5,
+              },
+            }}
+          />
+          {/* <TextInput
               placeholder="Masukkan Alamat Anda"
               style={{
                 borderWidth: 1,
@@ -136,8 +233,8 @@ const Home = ({navigation}) => {
                 top: 5,
                 left: 12,
               }}
-            />
-          </TouchableOpacity>
+            /> */}
+          {/* </TouchableOpacity> */}
         </View>
       </View>
 
@@ -195,32 +292,34 @@ const Home = ({navigation}) => {
               </View>
               <Text style={styles.categoryBtnTxt}>Salon</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
+            {/* <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
               <View style={styles.categoryIcon}>
                 <Image source={love} style={{width: 50, height: 50}} />
               </View>
               <Text style={styles.categoryBtnTxt}>Terfavorit</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View style={[styles.categoryContainer, {marginTop: 10}]}>
-            <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
+            <TouchableOpacity style={styles.categoryBtn} onPress={() => navigation.navigate('SeringDilihat')}>
               <View style={styles.categoryIcon}>
                 <Image source={mata} style={{width: 50, height: 50}} />
               </View>
               <Text style={styles.categoryBtnTxt}>Sering Dilihat</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.categoryBtn} onPress={() => navigation.navigate('PaketHemat')}>
+            <TouchableOpacity
+              style={styles.categoryBtn}
+              onPress={() => navigation.navigate('PaketHemat')}>
               <View style={styles.categoryIcon}>
                 <Image source={uang} style={{width: 50, height: 50}} />
               </View>
               <Text style={styles.categoryBtnTxt}>Paket Hemat</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
+            {/* <TouchableOpacity style={styles.categoryBtn} onPress={() => {}}>
               <View style={styles.categoryIcon}>
                 <Image source={showmore} style={{width: 50, height: 50}} />
               </View>
               <Text style={styles.categoryBtnTxt}>Lihat Lainnya</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View style={{height: 12}} />
           <View style={styles.cardsWrapper}>
@@ -233,60 +332,8 @@ const Home = ({navigation}) => {
               }}>
               Terakhir dikunjungi
             </Text>
-            <TouchableOpacity>
-              <View style={styles.card}>
-                <View style={styles.cardImgWrapper}>
-                  <Image
-                    source={require('../../assets/icon/food-banner2.jpg')}
-                    resizeMode="cover"
-                    style={styles.cardImg}
-                  />
-                </View>
-                <View style={styles.cardInfo}>
-                  <Text style={styles.cardTitle}>Amazing Food Place</Text>
-                  <StarRating ratings={4} reviews={99} />
-                  <Text style={styles.cardDetails}>
-                    Amazing description for this amazing place
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.card}>
-                <View style={styles.cardImgWrapper}>
-                  <Image
-                    source={require('../../assets/icon/food-banner2.jpg')}
-                    resizeMode="cover"
-                    style={styles.cardImg}
-                  />
-                </View>
-                <View style={styles.cardInfo}>
-                  <Text style={styles.cardTitle}>Amazing Food Place</Text>
-                  <StarRating ratings={4} reviews={99} />
-                  <Text style={styles.cardDetails}>
-                    Amazing description for this amazing place
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.card}>
-                <View style={styles.cardImgWrapper}>
-                  <Image
-                    source={require('../../assets/icon/food-banner2.jpg')}
-                    resizeMode="cover"
-                    style={styles.cardImg}
-                  />
-                </View>
-                <View style={styles.cardInfo}>
-                  <Text style={styles.cardTitle}>Amazing Food Place</Text>
-                  <StarRating ratings={4} reviews={99} />
-                  <Text style={styles.cardDetails}>
-                    Amazing description for this amazing place
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+
+            <LastVisit />
           </View>
         </View>
       </ScrollView>

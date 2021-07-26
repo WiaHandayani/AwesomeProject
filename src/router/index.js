@@ -43,7 +43,9 @@ import Barbershop from '../pages/TampilinData/Barbershop';
 import Salon from '../pages/TampilinData/Salon';
 import { DetailBarbershop } from '../pages/Barbershop';
 import PaketHemat from '../pages/isLogged/PaketHemat';
-
+import RouteMapShop from '../pages/isLogged/RouteMapShop';
+import SeringDilihat from '../pages/isLogged/SeringDilihat';
+import Detail from '../pages/AktivitasScreen/Detail';
 
 
 const Stack = createStackNavigator();
@@ -56,7 +58,9 @@ function Router() {
             <Stack.Screen name="kodeOtp" component={kodeOtp} options={{headerShown:false}}/>
             <Stack.Screen name="signup" component={signup} options={{headerShown:false}}/>
             <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
+            <Stack.Screen name="RouteMapShop" component={RouteMapShop} options={{headerShown:false}}/>
             <Stack.Screen name="PaketHemat" component={PaketHemat} options={{headerShown:false}}/>
+            <Stack.Screen name="SeringDilihat" component={SeringDilihat} options={{headerShown:false}}/>
             <Stack.Screen name="inputRegistrasi" component={inputRegistrasi} options={{headerShown:false}}/>
             <Stack.Screen name="maps" component={Maps} options={{headerShown:false}}/>
             <Stack.Screen name="welcome" component={Welcome} options={{headerShown:false}}/>
@@ -68,6 +72,7 @@ function Router() {
             <Stack.Screen name="Cari" component={Cari} options={{headerShown:false}}/>
             <Stack.Screen name="Riwayat" component={Riwayat} options={{headerShown:false}}/>
             <Stack.Screen name="AktivitasScreen" component={AktivitasScreen} options={{headerShown:false}}/>
+            <Stack.Screen name="DetailAktivitas" component={Detail} options={{headerShown:false}}/>
             <Stack.Screen name="GantiPw" component={GantiPw} options={{headerShown:false}}/>
             <Stack.Screen name="TentangApk" component={TentangApk} options={{headerShown:false}}/>
             <Stack.Screen name="KetentuanLayanan" component={KetentuanLayanan} options={{headerShown:false}}/>

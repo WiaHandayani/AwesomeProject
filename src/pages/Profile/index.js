@@ -8,15 +8,14 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 
+import axios from 'axios'
+import { BASE_URL } from '../../config'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
 import Share from 'react-native-share';
-
 import files from '../../assets/filesBase64';
 
 import { cari, Aktivitas, alamat, edit, Help, HomeIcon, Ketentuan, privasi, riwayat, share, tentang, tgllahir, tlp, User, gantipw, alamatUser} from '../../assets';
 import { colors } from '../../utils';
-import { BASE_URL } from '../../config';
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -26,9 +25,52 @@ const wait = (timeout) => {
 const Profile = ({navigation}) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
+  const [orderLast, setOrderLast] = useState({
+    six_month: 0,
+    one_month: 0
+  });
+
+  const getLastOrder = async () => {
+    setRefreshing(true);
+    try {
+      let params = {
+        id_user: await AsyncStorage.getItem('id_user'),
+      };
+
+      let formData = Object.keys(params)
+        .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+        .join('&');
+
+      let response = await axios.post(
+        BASE_URL + 'api.php?op=order_last',
+        formData,
+        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}},
+      );
+
+      console.log(response.data, formData);
+
+      let {success, data} = response.data;
+
+      if (success) {
+        setOrderLast({
+          six_month: data.sm.six_month,
+          one_month: data.om.one_month,
+        });
+      }
+      setRefreshing(false);
+    } catch (error) {
+      console.log('ERROR FETCH SAVING PACKAGE : ', error);
+      setRefreshing(false);
+    }
+  }
+
+  useEffect(() => {
+    getLastOrder()
+  }, [])
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    getLastOrder()
     wait(1000).then(() => setRefreshing(false));
   }, []);
 
@@ -41,7 +83,7 @@ const Profile = ({navigation}) => {
             }) 
         }
         getValue()
-    })
+    }, [])
 
     const [email, setemail] = useState('');
     useEffect(() =>{
@@ -52,7 +94,7 @@ const Profile = ({navigation}) => {
             }) 
         }
         getemail()
-    })
+    }, [])
 
     const [no_hp, setno_hp] = useState('');
     useEffect(() =>{
@@ -63,7 +105,7 @@ const Profile = ({navigation}) => {
             }) 
         }
         getno_hp()
-    })
+    }, [])
 
     const [id_user, setid_user] = useState('');
     useEffect(() =>{
@@ -74,7 +116,7 @@ const Profile = ({navigation}) => {
             }) 
         }
         getid_user()
-    })
+    }, [])
 
     const [foto_profil, setfoto_profil] = useState('');
     useEffect(() =>{
@@ -85,7 +127,7 @@ const Profile = ({navigation}) => {
             }) 
         }
         getfoto_profil()
-    })
+    }, [])
 
     const [alamat, setalamat] = useState('');
     useEffect(() =>{
@@ -96,7 +138,7 @@ const Profile = ({navigation}) => {
             }) 
         }
         getalamat()
-    })
+    }, [])
 
     const [tgl_lahir, setgl_lahir] = useState('');
     useEffect(() =>{
@@ -107,7 +149,7 @@ const Profile = ({navigation}) => {
             }) 
         }
         getgl_lahir()
-    })
+    }, [])
 
   const myCustomShare = async() => {
     const shareOptions = {
@@ -197,13 +239,13 @@ const Profile = ({navigation}) => {
             borderRightWidth: 1
           }]}>
             <TouchableOpacity style={{alignItems:'center'}}>
-              <Title>2</Title>
+              <Title>{orderLast.one_month}</Title>
               <Caption>Pesanan 1 bulan terakhir</Caption>
             </TouchableOpacity>
           </View>
           <View style={styles.infoBox}>
           <TouchableOpacity style={{alignItems:'center'}}>
-            <Title>15</Title>
+            <Title>{orderLast.six_month}</Title>
             <Caption>Orderan 6 bulan terakhir</Caption>
           </TouchableOpacity>
           </View>

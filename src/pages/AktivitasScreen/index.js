@@ -10,19 +10,55 @@ import {
   TextInput,
 } from 'react-native';
 
-import StarRating from '../../components/StarRating';
+import axios from 'axios';
 import {colors} from '../../utils';
 import {Aktivitas, HomeIcon, riwayat, User, cari, Search} from '../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../config';
+import { RefreshControl } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 const AktivitasScreen = ({navigation}) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [foto_profil, setfoto_profil] = useState('');
-  const [item, setItem] = useState({
-    foto_profil: 'anna-salon.jpg',
-    nama_usaha: 'Nama usaha',
-    alamat: 'alamat usaha'
-  })
+  const [activity, setActivity] = useState([]);
+
+  useEffect(() => {
+    getActivity();
+  }, []);
+
+  const getActivity = async () => {
+    setRefreshing(true);
+    try {
+      let params = {
+        id_user: await AsyncStorage.getItem('id_user'),
+      };
+
+      let formData = Object.keys(params)
+        .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+        .join('&');
+
+      let response = await axios.post(
+        BASE_URL + 'api.php?op=activity_order',
+        formData,
+        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}},
+      );
+
+      console.log(response.data, formData);
+
+      let {success, data} = response.data;
+
+      if (success) {
+        setActivity(data);
+      }
+      setRefreshing(false);
+    } catch (error) {
+      console.log('ERROR FETCH SAVING PACKAGE : ', error);
+      setRefreshing(false);
+    }
+  };
   useEffect(() => {
     const getfoto_profil = () => {
       AsyncStorage.getItem('foto_profil').then((foto_profil) => {
@@ -30,11 +66,17 @@ const AktivitasScreen = ({navigation}) => {
       });
     };
     getfoto_profil();
-  });
+  }, []);
 
   return (
-    <View style={{flex: 1}}>
-      <ScrollView>
+    <View style={{flex: 1, backgroundColor: colors.white }}>
+      <ScrollView 
+        refreshControl={
+          <RefreshControl 
+          refreshing={refreshing}
+          onRefresh={() => getActivity()}
+          />
+        }>
         <StatusBar backgroundColor="#4169E1" barStyle="light-content" />
         <View style={{flex: 1, backgroundColor: 'white'}}>
           <View style={{backgroundColor: '#4169E1', height: 70}}>
@@ -43,30 +85,87 @@ const AktivitasScreen = ({navigation}) => {
             </Text>
           </View>
           <View style={{height: 12}} />
-          <View style={styles.cardsWrapper}>
-            <TouchableOpacity onPress={() => navigation.navigate('DetailBarbershop', {item: item}) }>
-              <View style={styles.card}>
-                <View style={styles.cardImgWrapper}>
-                  <Image
-                    source={require('../../assets/icon/food-banner2.jpg')}
-                    resizeMode="cover"
-                    style={styles.cardImg}
-                  />
-                </View>
-                <View style={styles.cardInfo}>
-                  <Text style={styles.cardTitle}>Amazing Food Place</Text>
-                  <StarRating ratings={4} reviews={99} />
-                  <Text style={styles.cardDetails}>
-                    Amazing description for this amazing place
-                  </Text>
+
+          {/* Card */}
+          {activity.map((item, key) => (
+            <View key={key + 1}>
+              <View style={styles.cardsWrapper}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('DetailAktivitas', {item: item})}
+                  style={styles.card}
+                  activeOpacity={0.8}>
+                  <View style={styles.cardImgWrapper}>
+                    <Image
+                      source={{uri: BASE_URL + item.foto_profil}}
+                      style={styles.cardImg}>
+                      {/* <Text style={styles.textNo}>{(key += 1)}</Text> */}
+                    </Image>
+                  </View>
+                  <View style={styles.cardInfo}>
+                    <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
+                    {/* Description */}
+                    <View
+                      style={{
+                        paddingTop: 3,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
+                      <View
+                        style={{
+                          paddingRight: 18,
+                          flex: 1,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <MaterialIcons
+                          name="miscellaneous-services"
+                          size={14}
+                          style={{marginRight: 5}}
+                          color={colors.lightBlue400}
+                        />
+                        <Text
+                          style={styles.labelSubHeaderPesanan}
+                          numberOfLines={2}>
+                          {item.nama_pelayanan}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flex: 0.8,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <FontAwesome5Icon
+                          name="money-bill"
+                          size={13}
+                          style={{marginRight: 5}}
+                          color={colors.emerald500}
+                        />
+                        <Text
+                          style={styles.labelSubHeaderPesanan}
+                          numberOfLines={3}>
+                          Rp. {item.harga}
+                        </Text>
+                      </View>
+                    </View>
+                    {/* End Description */}
+
+                    <Text style={styles.cardDetails} numberOfLines={3}>
+                      {item.deskripsi}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View style={{ padding: 5, backgroundColor: colors.default }}>
+                  <Text style={{ color: colors.white, textAlign: 'center', textTransform: 'uppercase', fontSize: 12, fontWeight: '700' }}>{item.status_order}</Text>
                 </View>
               </View>
-            </TouchableOpacity>
-          </View>
+            </View>
+          ))}
+          {/* ENd Card */}
         </View>
       </ScrollView>
 
-      <View style={{height: 54, flexDirection: 'row'}}>
+      <View style={{height: 54, flexDirection: 'row', backgroundColor: colors.gray100}}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Image source={HomeIcon} style={{height: 26, width: 35}} />
@@ -172,13 +271,14 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   cardsWrapper: {
-    marginTop: 10,
+    flex: 1,
+    paddingHorizontal: 13,
     width: '100%',
     alignSelf: 'center',
   },
   card: {
     height: 100,
-    marginVertical: 5,
+    // marginVertical: 5,
     flexDirection: 'row',
     shadowColor: '#999',
     shadowOffset: {width: 0, height: 1},
@@ -193,7 +293,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     alignSelf: 'center',
-    borderRadius: 8,
+    // borderRadius: 8,
     borderBottomRightRadius: 0,
     borderTopRightRadius: 0,
   },

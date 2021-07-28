@@ -32,7 +32,7 @@ import {Search} from '../../assets';
 import StarRating from '../../components/StarRating';
 import {colors} from '../../utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {BASE_URL} from '../../config';
+import {BASE_URL, GMAPS_API} from '../../config';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
@@ -187,7 +187,7 @@ const Home = ({navigation}) => {
             fetchDetails={true}
             autoFillOnNotFound={true}
             query={{
-              key: 'AIzaSyAMwBbUtpCZDsC0DmEn0eYTuVnhOUIXkVc',
+              key: GMAPS_API,
               language: 'en',
             }}
             styles={{

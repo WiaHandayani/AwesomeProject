@@ -6,7 +6,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import {colors} from '../../utils';
 import RNLocation from 'react-native-location';
 import {Image} from 'react-native';
-import {BASE_URL} from '../../config';
+import {BASE_URL, GMAPS_API} from '../../config';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {ScrollView} from 'react-native';
 
@@ -112,7 +112,7 @@ export default function Detail({route}) {
           <MapViewDirections
             origin={coordinates}
             destination={marker}
-            apikey="AIzaSyAMwBbUtpCZDsC0DmEn0eYTuVnhOUIXkVc"
+            apikey={GMAPS_API}
             strokeColor={'blue'}
             strokeWidth={5}
           />

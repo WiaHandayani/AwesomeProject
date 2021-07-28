@@ -8,6 +8,7 @@ import {
   ScrollView,
   StatusBar,
   TextInput,
+  Alert,
 } from 'react-native';
 
 import axios from 'axios';
@@ -28,6 +29,54 @@ const AktivitasScreen = ({navigation}) => {
   useEffect(() => {
     getActivity();
   }, []);
+
+  const batalkan = (item) => 
+    Alert.alert(
+      "Perhatian",
+      "Apakah anda yakin ingin menghapus pesanan ini?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => deleteOrder(item) }
+      ]
+    );
+  
+
+  const deleteOrder = async (item) => {
+    setRefreshing(true);
+    try {
+      let params = {
+        id_user: await AsyncStorage.getItem('id_user'),
+        id_order: item.id_order
+      };
+
+      let formData = Object.keys(params)
+        .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+        .join('&');
+
+      let response = await axios.post(
+        BASE_URL + 'api.php?op=batal_order',
+        formData,
+        {headers: {'Content-Type': 'application/x-www-form-urlencoded'}},
+      );
+
+      console.log('DELETE ORDER ', response);
+
+      let {success, message} = response.data;
+
+      if (success) {
+        alert(message)
+        getActivity()
+      }
+      setRefreshing(false);
+    } catch (error) {
+      console.log('ERROR FETCH SAVING PACKAGE : ', error);
+      setRefreshing(false);
+    }
+  };
 
   const getActivity = async () => {
     setRefreshing(true);
@@ -96,7 +145,7 @@ const AktivitasScreen = ({navigation}) => {
                   activeOpacity={0.8}>
                   <View style={styles.cardImgWrapper}>
                     <Image
-                      source={{uri: BASE_URL + item.foto_profil}}
+                      source={{uri: BASE_URL + item.foto}}
                       style={styles.cardImg}>
                       {/* <Text style={styles.textNo}>{(key += 1)}</Text> */}
                     </Image>
@@ -155,9 +204,16 @@ const AktivitasScreen = ({navigation}) => {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <View style={{ padding: 5, backgroundColor: colors.default }}>
-                  <Text style={{ color: colors.white, textAlign: 'center', textTransform: 'uppercase', fontSize: 12, fontWeight: '700' }}>{item.status_order}</Text>
-                </View>
+                  {item.status_order ? 
+                  (
+                    <View style={{ padding: 5, backgroundColor: colors.default }}>
+                      <Text style={{ color: colors.white, textAlign: 'center', textTransform: 'uppercase', fontSize: 12, fontWeight: '700' }}>{item.status_order}</Text>
+                    </View>
+                    ) : (
+                    <TouchableOpacity onPress={() => batalkan(item)} style={{ padding: 5, backgroundColor: colors.red500 }}>
+                      <Text style={{ color: colors.white, textAlign: 'center', textTransform: 'uppercase', fontSize: 12, fontWeight: '700' }}>Batalkan</Text>
+                    </TouchableOpacity>
+                  )}
               </View>
             </View>
           ))}
@@ -275,6 +331,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     width: '100%',
     alignSelf: 'center',
+    marginBottom: 20
   },
   card: {
     height: 100,

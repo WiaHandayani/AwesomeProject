@@ -138,7 +138,8 @@ const Cari = ({navigation}) => {
                   </View>
                   <View style={styles.cardInfo}>
                     <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
-                    <StarRating ratings={4} reviews={99} />
+                    {/* <StarRating ratings={4} reviews={99} /> */}
+                    <View style={{ height: 8 }}/>
 
                     <Text style={styles.cardDetails} numberOfLines={3}>
                       {item.alamat}

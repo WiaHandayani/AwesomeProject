@@ -388,8 +388,8 @@ const Home = ({navigation}) => {
             <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
               {foto_profil != null ? (
                 <Image
-                  style={{height: 26, width: 26}}
-                  source={{uri: BASE_URL + 'api/uploads/' + foto_profil}}
+                  style={{height: 30, width: 30, borderRadius: 50, resizeMode: 'cover'}}
+                  source={{uri: BASE_URL + foto_profil}}
                 />
               ) : null}
 

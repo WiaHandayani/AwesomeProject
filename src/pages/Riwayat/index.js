@@ -10,6 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';import {colors} from '../../utils';
 import {Aktivitas, HomeIcon, riwayat, User, cari, Search} from '../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -79,97 +80,107 @@ const Riwayat = ({navigation}) => {
         <View style={{flex: 1, backgroundColor: 'white'}}>
           <View style={{backgroundColor: '#4169E1', height: 70}}>
             <Text style={styles.text_header}>
-              GetHaircut Application - Aktivitas
+              GetHaircut Application - Riwayat
             </Text>
           </View>
           <View style={{height: 12}} />
 
           {/* Card */}
-          {activity.map((item, key) => (
-            <View key={key + 1}>
-              <View style={styles.cardsWrapper}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('DetailAktivitas', {item: item})
-                  }
-                  style={styles.card}
-                  activeOpacity={0.8}>
-                  <View style={styles.cardImgWrapper}>
-                    <Image
-                      source={{uri: BASE_URL + item.foto}}
-                      style={styles.cardImg}>
-                      {/* <Text style={styles.textNo}>{(key += 1)}</Text> */}
-                    </Image>
-                  </View>
-                  <View style={styles.cardInfo}>
-                    <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
-                    {/* Description */}
-                    <View
-                      style={{
-                        paddingTop: 3,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                      }}>
-                      <View
-                        style={{
-                          paddingRight: 18,
-                          flex: 1,
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
-                        <MaterialIcons
-                          name="miscellaneous-services"
-                          size={14}
-                          style={{marginRight: 5}}
-                          color={colors.lightBlue400}
-                        />
-                        <Text
-                          style={styles.labelSubHeaderPesanan}
-                          numberOfLines={2}>
-                          {item.nama_pelayanan}
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          flex: 0.8,
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                        }}>
-                        <FontAwesome5Icon
-                          name="money-bill"
-                          size={13}
-                          style={{marginRight: 5}}
-                          color={colors.emerald500}
-                        />
-                        <Text
-                          style={styles.labelSubHeaderPesanan}
-                          numberOfLines={3}>
-                          Rp. {item.harga}
-                        </Text>
-                      </View>
+          {activity.length > 0 
+            ? activity.map((item, key) => (
+              <View key={key + 1}>
+                <View style={styles.cardsWrapper}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('DetailAktivitas', {item: item})
+                    }
+                    style={styles.card}
+                    activeOpacity={0.8}>
+                    <View style={styles.cardImgWrapper}>
+                      <Image
+                        source={{uri: BASE_URL + item.foto}}
+                        style={styles.cardImg}>
+                        {/* <Text style={styles.textNo}>{(key += 1)}</Text> */}
+                      </Image>
                     </View>
-                    {/* End Description */}
-
-                    <Text style={styles.cardDetails} numberOfLines={3}>
-                      {item.deskripsi}
+                    <View style={styles.cardInfo}>
+                      <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
+                      {/* Description */}
+                      <View
+                        style={{
+                          paddingTop: 3,
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                        }}>
+                        <View
+                          style={{
+                            paddingRight: 18,
+                            flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          <MaterialIcons
+                            name="miscellaneous-services"
+                            size={14}
+                            style={{marginRight: 5}}
+                            color={colors.lightBlue400}
+                          />
+                          <Text
+                            style={styles.labelSubHeaderPesanan}
+                            numberOfLines={2}>
+                            {item.nama_pelayanan}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 0.8,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          <FontAwesome5Icon
+                            name="money-bill"
+                            size={13}
+                            style={{marginRight: 5}}
+                            color={colors.emerald500}
+                          />
+                          <Text
+                            style={styles.labelSubHeaderPesanan}
+                            numberOfLines={3}>
+                            Rp. {item.harga}
+                          </Text>
+                        </View>
+                      </View>
+                      {/* End Description */}
+  
+                      <Text style={styles.cardDetails} numberOfLines={3}>
+                        {item.deskripsi}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View style={{padding: 5, backgroundColor: colors.emerald500}}>
+                    <Text
+                      style={{
+                        color: colors.white,
+                        textAlign: 'center',
+                        textTransform: 'uppercase',
+                        fontSize: 12,
+                        fontWeight: '700',
+                      }}>
+                      {item.status_order}
                     </Text>
                   </View>
-                </TouchableOpacity>
-                <View style={{padding: 5, backgroundColor: colors.emerald500}}>
-                  <Text
-                    style={{
-                      color: colors.white,
-                      textAlign: 'center',
-                      textTransform: 'uppercase',
-                      fontSize: 12,
-                      fontWeight: '700',
-                    }}>
-                    {item.status_order}
-                  </Text>
                 </View>
               </View>
-            </View>
-          ))}
+            ))
+            :
+            (
+              <View style={{  flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 30 }}>
+                <MaterialCommunityIcons name="view-list" size={70} color={colors.gray500} />
+                <Text style={{  fontSize: 16, color: colors.gray500, textTransform: 'uppercase', fontWeight: '700' }}>Belum ada riwayat</Text>
+              </View>
+            )
+          }
+          {}
           {/* ENd Card */}
         </View>
       </ScrollView>
@@ -201,7 +212,7 @@ const Riwayat = ({navigation}) => {
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <TouchableOpacity onPress={() => navigation.navigate('Cari')}>
             <Image style={{height: 28, width: 28}} source={cari} />
-            <Text style={{fontSize: 12, color: colors.default, marginTop: 4}}>
+            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
               Cari
             </Text>
           </TouchableOpacity>
@@ -209,7 +220,7 @@ const Riwayat = ({navigation}) => {
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
             <Image style={{height: 26, width: 26}} source={riwayat} />
-            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+            <Text style={{fontSize: 12, color: colors.default, marginTop: 4}}>
               Riwayat
             </Text>
           </TouchableOpacity>
@@ -219,7 +230,7 @@ const Riwayat = ({navigation}) => {
             {foto_profil != null ? (
               <Image
                 style={{height: 26, width: 26}}
-                source={{uri: BASE_URL + 'api/uploads/' + foto_profil}}
+                source={{uri: BASE_URL + foto_profil}}
               />
             ) : null}
 

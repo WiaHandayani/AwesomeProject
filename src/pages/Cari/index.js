@@ -11,7 +11,7 @@ import {
   FlatList,
 } from 'react-native';
 
-import StarRating from '../../components/StarRating';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '../../utils';
 import {Aktivitas, HomeIcon, riwayat, User, cari, Search} from '../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -121,34 +121,64 @@ const Cari = ({navigation}) => {
 
           <View style={{height: 12}} />
 
-          <FlatList
-            data={listdata}
-            keyExtractor={(item, index) => index}
-            renderItem={({item}) => (
-              <View style={styles.cardsWrapper}>
-                <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DetailBarbershop', {item: item})} activeOpacity={0.8}>
-                  <View style={styles.cardImgWrapper}>
-                    <Image
-                      source={{
-                        uri: BASE_URL + 'foto_usaha/' + item.foto_profil,
-                      }}
-                      resizeMode="cover"
-                      style={styles.cardImg}
-                    />
-                  </View>
-                  <View style={styles.cardInfo}>
-                    <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
-                    {/* <StarRating ratings={4} reviews={99} /> */}
-                    <View style={{ height: 8 }}/>
+          {listdata.length > 0 ? (
+            <FlatList
+              data={listdata}
+              keyExtractor={(item, index) => index}
+              renderItem={({item}) => (
+                <View style={styles.cardsWrapper}>
+                  <TouchableOpacity
+                    style={styles.card}
+                    onPress={() =>
+                      navigation.navigate('DetailBarbershop', {item: item})
+                    }
+                    activeOpacity={0.8}>
+                    <View style={styles.cardImgWrapper}>
+                      <Image
+                        source={{
+                          uri: BASE_URL + item.foto_profil,
+                        }}
+                        resizeMode="cover"
+                        style={styles.cardImg}
+                      />
+                    </View>
+                    <View style={styles.cardInfo}>
+                      <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
+                      {/* <StarRating ratings={4} reviews={99} /> */}
+                      <View style={{height: 8}} />
 
-                    <Text style={styles.cardDetails} numberOfLines={3}>
-                      {item.alamat}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            )}
-          />
+                      <Text style={styles.cardDetails} numberOfLines={3}>
+                        {item.alamat}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
+            />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingTop: 30,
+              }}>
+              <MaterialIcons
+                name="search"
+                size={70}
+                color={colors.gray500}
+              />
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: colors.gray500,
+                  textTransform: 'uppercase',
+                  fontWeight: '700',
+                }}>
+                Belum ada barbershop/salon
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -197,7 +227,7 @@ const Cari = ({navigation}) => {
             {foto_profil != null ? (
               <Image
                 style={{height: 26, width: 26}}
-                source={{uri: BASE_URL + 'api/uploads/' + foto_profil}}
+                source={{uri: BASE_URL + foto_profil}}
               />
             ) : null}
 

@@ -153,7 +153,7 @@ const Profile = ({navigation}) => {
 
   const myCustomShare = async() => {
     const shareOptions = {
-      message: 'Order your next meal from FoodFinder App. I\'ve already ordered more than 10 meals on it.',
+      message: 'Ingin ke salon atau barbershop tapi malas untuk mengantri? Segera daftarkan diri anda dan pesan melalui Get Haircut Application untuk mendapatkan pelayanan yang terbaik dan efisien',
       url: files.appLogo,
       // urls: [files.image1, files.image2]
     }
@@ -191,7 +191,7 @@ const Profile = ({navigation}) => {
         {foto_profil != null ? (
                  <Avatar.Image 
                  source={{
-                   uri: BASE_URL+'api/uploads/'+foto_profil,
+                   uri: BASE_URL + foto_profil,
                  }}
                  size={80}
                />

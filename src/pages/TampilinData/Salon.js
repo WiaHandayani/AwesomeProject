@@ -119,7 +119,7 @@ const Salon = ({navigation}) => {
                   <View style={styles.cardImgWrapper}>
                     <Image
                       source={{
-                        uri: BASE_URL + 'foto_usaha/' + val.foto_profil,
+                        uri: BASE_URL + val.foto_profil,
                       }}
                       resizeMode="cover"
                       style={styles.cardImg}
@@ -187,7 +187,7 @@ const Salon = ({navigation}) => {
             {foto_profil != null ? (
               <Image
                 style={{height: 26, width: 26}}
-                source={{uri: BASE_URL + 'api/uploads/' + foto_profil}}
+                source={{uri: BASE_URL +  foto_profil}}
               />
             ) : null}
 

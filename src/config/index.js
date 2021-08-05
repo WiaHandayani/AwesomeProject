@@ -1,2 +1,2 @@
-export const BASE_URL = 'http://17d0d98ed248.ngrok.io/'
-export const GMAPS_API = 'AIzaSyAVUh9Z-aiHZ21fDRJRlZtTwmaHDkEM_4g'
+export const BASE_URL = 'http://9ef6870ced8f.ngrok.io/'
+export const GMAPS_API = 'AIzaSyDrYsJ2cweWWNUnt-wLu6vOZYbja_TP7jc'

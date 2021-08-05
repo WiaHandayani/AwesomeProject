@@ -26,7 +26,6 @@ const signin = ({navigation}) => {
   };
 
   const sendData = () => {
-    alert(BASE_URL)
     if (form.email == '') {
       alert('Silakan isi username dan password untuk login');
     } else {

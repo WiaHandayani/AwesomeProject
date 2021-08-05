@@ -13,7 +13,7 @@ import {
 import MapView, {Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import {findNearest} from 'geolib';
-import {BASE_URL} from '../../config';
+import {BASE_URL, GMAPS_API} from '../../config';
 
 const {width, height} = Dimensions.get('window');
 const CARD_HEIGHT = 220;
@@ -187,7 +187,7 @@ export default function RouteMapShop({navigation, route}) {
           <MapViewDirections
             origin={coordinates}
             destination={closest}
-            apikey="AIzaSyAMwBbUtpCZDsC0DmEn0eYTuVnhOUIXkVc"
+            apikey={GMAPS_API}
             strokeColor={'blue'}
             strokeWidth={5}
           />

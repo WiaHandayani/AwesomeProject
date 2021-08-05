@@ -109,7 +109,7 @@ return (
             </View>
             <View style={{ flex:1, alignItems:'center', justifyContent:'center'}}>
               <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-                <Image style={{height:26, width:26}} source={{uri: BASE_URL+'api/uploads/'+foto_profil}}/>
+                <Image style={{height:26, width:26}} source={{uri: BASE_URL+foto_profil}}/>
                 <Text style={{fontSize:12, color:'#545454', marginTop:4}}>Akun</Text>
               </TouchableOpacity>
             </View>

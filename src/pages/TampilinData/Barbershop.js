@@ -20,13 +20,14 @@ const Barbershop = ({navigation}) => {
   const [listdata, setlistdata] = useState([]);
   const [foto_profil, setfoto_profil] = useState('');
   useEffect(() => {
-    const getfoto_profil = () => {
-      AsyncStorage.getItem('foto_profil').then((foto_profil) => {
-        setfoto_profil(foto_profil);
-      });
-    };
-    getfoto_profil();
-  });
+    async function funGetAsyncStorage() {
+      let _fotoprofil = await AsyncStorage.getItem('foto_profil');
+  
+      setfoto_profil(_fotoprofil);
+    }
+
+    funGetAsyncStorage()
+  }, []);
 
   function CariData(value) {
     var urlAksi = BASE_URL + 'api.php?op=cari_barber';

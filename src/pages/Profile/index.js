@@ -75,81 +75,30 @@ const Profile = ({navigation}) => {
   }, []);
 
   const [value, setvalue] = useState('');
-    useEffect(() =>{
-        const getValue = () => {
-            AsyncStorage.getItem('nama')
-            .then((value) => {
-                setvalue(value);
-            }) 
-        }
-        getValue()
-    }, [])
+  const [email, setemail] = useState('');
+  const [no_hp, setno_hp] = useState('');
+  const [id_user, setid_user] = useState('');
+  const [foto_profil, setfoto_profil] = useState('');
+  const [alamat, setalamat] = useState('');
+  const [tgl_lahir, setgl_lahir] = useState('');
 
-    const [email, setemail] = useState('');
-    useEffect(() =>{
-        const getemail = () => {
-            AsyncStorage.getItem('email')
-            .then((email) => {
-                setemail(email);
-            }) 
-        }
-        getemail()
-    }, [])
+  useEffect(async () => {
+    let _idUser = await AsyncStorage.getItem('id_user');
+    let _nama = await AsyncStorage.getItem('nama');
+    let _foto_profil = await AsyncStorage.getItem('foto_profil');
+    let _tglLahir = await AsyncStorage.getItem('tgl_lahiir');
+    let _alamat = await AsyncStorage.getItem('alamat');
+    let _no_hp = await AsyncStorage.getItem('no_hp');
+    let _email = await AsyncStorage.getItem('email');
 
-    const [no_hp, setno_hp] = useState('');
-    useEffect(() =>{
-        const getno_hp = () => {
-            AsyncStorage.getItem('no_hp')
-            .then((no_hp) => {
-                setno_hp(no_hp);
-            }) 
-        }
-        getno_hp()
-    }, [])
-
-    const [id_user, setid_user] = useState('');
-    useEffect(() =>{
-        const getid_user = () => {
-            AsyncStorage.getItem('id_user')
-            .then((id_user) => {
-                setid_user(id_user);
-            }) 
-        }
-        getid_user()
-    }, [])
-
-    const [foto_profil, setfoto_profil] = useState('');
-    useEffect(() =>{
-        const getfoto_profil = () => {
-            AsyncStorage.getItem('foto_profil')
-            .then((foto_profil) => {
-                setfoto_profil(foto_profil);
-            }) 
-        }
-        getfoto_profil()
-    }, [])
-
-    const [alamat, setalamat] = useState('');
-    useEffect(() =>{
-        const getalamat = () => {
-            AsyncStorage.getItem('alamat')
-            .then((alamat) => {
-                setalamat(alamat);
-            }) 
-        }
-        getalamat()
-    }, [])
-
-    const [tgl_lahir, setgl_lahir] = useState('');
-    useEffect(() =>{
-        const getgl_lahir = () => {
-            AsyncStorage.getItem('tgl_lahir')
-            .then((tgl_lahir) => {
-                setgl_lahir(tgl_lahir);
-            }) 
-        }
-        getgl_lahir()
-    }, [])
+    setid_user(_idUser)
+    setvalue(_nama)
+    setgl_lahir(_tglLahir);
+    setalamat(_alamat)
+    setfoto_profil(_foto_profil)
+    setno_hp(_no_hp)
+    setemail(_email)
+  }, []);
 
   const myCustomShare = async() => {
     const shareOptions = {

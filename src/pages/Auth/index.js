@@ -5,13 +5,10 @@ import { StyleSheet, ActivityIndicator, View } from 'react-native'
 const Auth = ({navigation}) => {
 
     useEffect(() => {
-        const _validasiSession = async () => {
-          const isLogin = await AsyncStorage.getItem('nama') 
-          
-          navigation.navigate(isLogin ? 'Home' : 'welcome')
-        }
-        _validasiSession()
-      },[])
+      const isLogin = async () => await AsyncStorage.getItem('nama') 
+
+      navigation.navigate(isLogin ? 'Home' : 'welcome')
+    }, [])
 
     return (
         <View>

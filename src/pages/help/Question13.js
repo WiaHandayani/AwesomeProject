@@ -15,15 +15,15 @@ import { BASE_URL } from '../../config';
 
 const Question13 = ({navigation}) => {
   const [foto_profil, setfoto_profil] = useState('');
-    useEffect(() =>{
-        const getfoto_profil = () => {
-            AsyncStorage.getItem('foto_profil')
-            .then((foto_profil) => {
-                setfoto_profil(foto_profil);
-            }) 
-        }
-        getfoto_profil()
-    })
+  useEffect(() => {
+    async function funGetAsyncStorage() {
+      let _fotoprofil = await AsyncStorage.getItem('foto_profil');
+  
+      setfoto_profil(_fotoprofil);
+    }
+
+    funGetAsyncStorage()
+  }, []);
 return (
     <View style={{flex:1}}>
         <ScrollView>

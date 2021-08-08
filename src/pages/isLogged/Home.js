@@ -58,12 +58,13 @@ const Home = ({navigation}) => {
 
   const [nama, setnama] = useState('');
   useEffect(() => {
-    const getnama = () => {
-      AsyncStorage.getItem('nama').then((nama) => {
-        setnama(nama);
-      });
-    };
-    getnama();
+    async function funGetAsyncStorage() {
+      let _nama = await AsyncStorage.getItem('nama');
+  
+      setnama(_nama);
+    }
+
+    funGetAsyncStorage()
   }, []);
 
   const [foto_profil, setfoto_profil] = useState('');

@@ -58,12 +58,13 @@ const Riwayat = ({navigation}) => {
   };
 
   useEffect(() => {
-    const getfoto_profil = () => {
-      AsyncStorage.getItem('foto_profil').then((foto_profil) => {
-        setfoto_profil(foto_profil);
-      });
-    };
-    getfoto_profil();
+    async function funGetAsyncStorage() {
+      let _fotoprofil = await AsyncStorage.getItem('foto_profil');
+  
+      setfoto_profil(_fotoprofil);
+    }
+
+    funGetAsyncStorage()
   }, []);
 
   return (

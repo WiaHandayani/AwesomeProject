@@ -23,12 +23,13 @@ const Cari = ({navigation}) => {
   const [listdata, setlistdata] = useState([]);
   const [newlistdata, setnewlistdata] = useState([]);
   useEffect(() => {
-    const getfoto_profil = () => {
-      AsyncStorage.getItem('foto_profil').then((foto_profil) => {
-        setfoto_profil(foto_profil);
-      });
-    };
-    getfoto_profil();
+    async function funFotoProfile() {
+      let _fotoprofil = await AsyncStorage.getItem('foto_profil');
+  
+      setfoto_profil(_fotoprofil);
+    }
+
+    funFotoProfile()
   }, []);
 
   useEffect(() => {

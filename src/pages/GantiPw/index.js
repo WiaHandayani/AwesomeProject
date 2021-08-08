@@ -23,13 +23,14 @@ const GantiPw = ({navigation}) => {
 
   const [id_user, setid_user] = useState('');
   useEffect(() => {
-    const getid_user = () => {
-      AsyncStorage.getItem('id_user').then((id_user) => {
-        setid_user(id_user);
-      });
-    };
-    getid_user();
-  });
+    async function funGetAsyncStorage() {
+      let _idUser = await AsyncStorage.getItem('id_user');
+  
+      setid_user(_idUser);
+    }
+
+    funGetAsyncStorage()
+  }, []);
 
   const updateSecureTextEntry = () => {
     setData({

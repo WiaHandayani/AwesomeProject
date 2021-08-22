@@ -25,7 +25,7 @@ const signup = ({navigation}) => {
 
   const sendData = () => {
     if (form.email == '') {
-      alert('Silakan mengisi data dengan lengkap');
+      return alert('Silakan mengisi data dengan lengkap');
     } else {
       var urlAksi = BASE_URL + 'api.php?op=create';
 

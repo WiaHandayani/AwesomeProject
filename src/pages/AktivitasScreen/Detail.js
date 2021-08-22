@@ -219,7 +219,7 @@ export default function Detail({route}) {
               <Text>No. Antrian </Text>
             </View>
             <Text>: </Text>
-            <Text>{item.no_antri}</Text>
+            <Text>{item.no_antri ?? '-'}</Text>
           </View>
 
           <View
@@ -249,7 +249,7 @@ export default function Detail({route}) {
               <Text>Estimasi Waktu</Text>
             </View>
             <Text>: </Text>
-            <Text>{item.estimasi_waktu+ ' Menit'}</Text>
+            <Text>{item.estimasi_waktu ? item.estimasi_waktu+ ' Menit' : 'Belum ada estimasi waktu'}</Text>
           </View>
         </View>
         {/* End Pelayanan  */}

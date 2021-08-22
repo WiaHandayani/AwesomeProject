@@ -15,6 +15,7 @@ import {colors} from '../../utils';
 import {Aktivitas, HomeIcon, riwayat, User, cari, Search} from '../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../config';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 const Barbershop = ({navigation}) => {
   const [listdata, setlistdata] = useState([]);
@@ -22,11 +23,11 @@ const Barbershop = ({navigation}) => {
   useEffect(() => {
     async function funGetAsyncStorage() {
       let _fotoprofil = await AsyncStorage.getItem('foto_profil');
-  
+
       setfoto_profil(_fotoprofil);
     }
 
-    funGetAsyncStorage()
+    funGetAsyncStorage();
   }, []);
 
   function CariData(value) {
@@ -43,7 +44,7 @@ const Barbershop = ({navigation}) => {
       .then((responseJson) => {
         if (responseJson) {
           setlistdata([]);
-          setlistdata(responseJson);
+          setlistdata(responseJson == null ? [] : responseJson);
         }
       })
       .catch((error) => {
@@ -63,7 +64,7 @@ const Barbershop = ({navigation}) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        setlistdata(responseJson);
+        setlistdata(responseJson == null ? [] : responseJson);
       })
       .catch((error) => {
         console.log(error.message);
@@ -117,33 +118,62 @@ const Barbershop = ({navigation}) => {
         <ScrollView>
           <View style={{height: 12}} />
 
-          {listdata.map((val, index) => (
-            <View style={styles.cardsWrapper} key={index}>
-              <TouchableOpacity onPress={() => navigation.navigate('DetailBarbershop', {item: val})} activeOpacity={0.8}>
-                <View style={styles.card}>
-                  <View style={styles.cardImgWrapper}>
-                    <Image
-                      source={{
-                        uri: BASE_URL + val.foto_profil,
-                      }}
-                      resizeMode="cover"
-                      style={styles.cardImg}
-                    />
-                  </View>
-                  <View style={styles.cardInfo}>
-                    <Text style={styles.cardTitle}>{val.nama_usaha}</Text>
-                    {/* <StarRating ratings={4} reviews={99} /> */}
-                    <View style={{ height: 8 }}/>
+          {listdata.length > 0 ? (
+            listdata.map((val, index) => (
+              <View style={styles.cardsWrapper} key={index}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('DetailBarbershop', {item: val})
+                  }
+                  activeOpacity={0.8}>
+                  <View style={styles.card}>
+                    <View style={styles.cardImgWrapper}>
+                      <Image
+                        source={{
+                          uri: BASE_URL + val.foto_profil,
+                        }}
+                        resizeMode="cover"
+                        style={styles.cardImg}
+                      />
+                    </View>
+                    <View style={styles.cardInfo}>
+                      <Text style={styles.cardTitle}>{val.nama_usaha}</Text>
+                      {/* <StarRating ratings={4} reviews={99} /> */}
+                      <View style={{height: 8}} />
 
-
-                    <Text style={styles.cardDetails} key={index}>
-                      {val.alamat}
-                    </Text>
+                      <Text style={styles.cardDetails} key={index}>
+                        {val.alamat}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
+            ))
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingVertical: 50,
+              }}>
+              <FontAwesome5Icon
+                name="cut"
+                size={100}
+                color={colors.gray400}
+              />
+              <Text
+                style={{
+                  paddingTop: 10,
+                  fontSize: 13,
+                  textTransform: 'uppercase',
+                  fontWeight: '700',
+                  color: colors.gray500,
+                }}>
+                Belum ada barbershop
+              </Text>
             </View>
-          ))}
+          )}
         </ScrollView>
       </View>
 
@@ -192,7 +222,7 @@ const Barbershop = ({navigation}) => {
             {foto_profil != null ? (
               <Image
                 style={{height: 26, width: 26}}
-                source={{uri: BASE_URL +  foto_profil}}
+                source={{uri: BASE_URL + foto_profil}}
               />
             ) : null}
 

@@ -50,28 +50,28 @@ const inputRegistrasi = ({navigation, route}) => {
 
   const sendData = () => {
     if (form.nama == '') {
-      alert('Inputan harus diisi');
+      return alert('Inputan harus diisi');
     }
     if (form.alamat == '') {
-      alert('Inputan harus diisi');
+      return alert('Inputan harus diisi');
     }
     if (form.no_hp == '') {
-      alert('Inputan harus diisi');
+      return alert('Inputan harus diisi');
     }
     if (form.tgl_lahir == '') {
-      alert('Inputan harus diisi');
+      return alert('Inputan harus diisi');
     }
     if (form.password == '') {
-      alert('Inputan harus diisi');
+      return alert('Inputan harus diisi');
     }
     if (form.konfirm_password == '') {
-      alert('Inputan harus diisi');
+      return alert('Inputan harus diisi');
     }
     if (form.password.length < 8) {
-      alert('Panjang minimal password 8 huruf');
+      return alert('Panjang minimal password 8 huruf');
     }
     if (form.password != form.konfirm_password) {
-      alert('konfirmasi kata sandi tidak cocok');
+      return alert('konfirmasi kata sandi tidak cocok');
     } else {
       var urlAksi = BASE_URL + 'api.php?op=registrasi';
       console.log(form.tgl_lahir);
@@ -192,6 +192,8 @@ const inputRegistrasi = ({navigation, route}) => {
           </Text>
           <View style={styles.action}>
             <TextInput
+              keyboardType="numeric"
+              maxLength={12}
               placeholder="Masukkan Nomor Handphone Anda"
               style={styles.textInput}
               autoCapitalize="none"

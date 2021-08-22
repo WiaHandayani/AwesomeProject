@@ -44,7 +44,7 @@ const Cari = ({navigation}) => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        setlistdata(responseJson);
+        setlistdata(responseJson == null ? [] : responseJson);
       })
       .catch((error) => {
         console.log(error.message);
@@ -64,7 +64,7 @@ const Cari = ({navigation}) => {
       .then((response) => response.json())
       .then((responseJson) => {
         setlistdata([]);
-        setlistdata(responseJson);
+        setlistdata(responseJson == null ? [] : responseJson);
       })
       .catch((error) => {
         console.log(error.message);

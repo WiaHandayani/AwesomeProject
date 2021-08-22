@@ -17,8 +17,8 @@ import {colors} from '../../utils';
 
 const signin = ({navigation}) => {
   const [form, setForm] = useState({
-    email: '',
-    password: '',
+    email: 'hasansoleh44@gmail.com',
+    password: '12345678',
   });
 
   const handleGoTo = (screen) => {
@@ -41,13 +41,13 @@ const signin = ({navigation}) => {
         .then((response) => response.json())
         .then((responseJson) => {
           if (responseJson[0] == 'Login Berhasil') {
-            AsyncStorage.setItem('nama', responseJson[1]);
-            AsyncStorage.setItem('id_user', responseJson[2]);
-            AsyncStorage.setItem('email', responseJson[3]);
-            AsyncStorage.setItem('no_hp', responseJson[4]);
-            AsyncStorage.setItem('foto_profil', responseJson[5]);
-            AsyncStorage.setItem('alamat', responseJson[6]);
-            AsyncStorage.setItem('tgl_lahir', responseJson[7]);
+            AsyncStorage.setItem('nama', responseJson[1] == null ? '' : responseJson[1]);
+            AsyncStorage.setItem('id_user', responseJson[2] == null ? '' : responseJson[2]);
+            AsyncStorage.setItem('email', responseJson[3] == null ? '' : responseJson[3]);
+            AsyncStorage.setItem('no_hp', responseJson[4] == null ? '' : responseJson[4]);
+            AsyncStorage.setItem('foto_profil', responseJson[5] == null ? '' : responseJson[5]);
+            AsyncStorage.setItem('alamat', responseJson[6] == null ? '' : responseJson[6]);
+            AsyncStorage.setItem('tgl_lahir', responseJson[7] == null ? '' : responseJson[7]);
             alert(responseJson[0]);
             handleGoTo('Home');
           } else {

@@ -57,7 +57,7 @@ export default function PaketHemat({navigation}) {
     }
   };
 
-  const pesanPelayanan = () =>
+  const pesanPelayanan = (item) =>
     Alert.alert('', 'Ingin memesan layanan ini', [
       {
         text: 'Tidak',
@@ -66,11 +66,34 @@ export default function PaketHemat({navigation}) {
       },
       {
         text: 'Ya',
-        onPress: () =>
-          alert(
-            'Pesanan berhasil ditambahkan, mohon menunggu konfirmasi dari pihak penyedia layanan',
-          ),
-      },
+        onPress: async () => {
+          console.log(item);
+          let params = {
+            id_usaha: item.id_usaha,
+            id_pelayanan: item.id_pelayanan,
+            id_user: await AsyncStorage.getItem('id_user'),
+          };
+      
+          let formData = Object.keys(params)
+            .map((key) => `${key}=${encodeURIComponent(params[key])}`)
+            .join('&');
+      
+          try {
+            let response = await axios.post(
+              BASE_URL + 'api.php?op=addorder',
+              formData,
+              {headers: {'Content-Type': 'application/x-www-form-urlencoded'}},
+            );
+      
+            console.log(response.data);
+            let {success, message} = response.data;
+      
+            alert(message);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
     ]);
 
   const CSavingPackage = () => {
@@ -79,7 +102,7 @@ export default function PaketHemat({navigation}) {
         <View key={key + 1}>
           <View style={styles.cardsWrapper}>
             <TouchableOpacity
-              onPress={pesanPelayanan}
+              onPress={() => pesanPelayanan(item)}
               style={styles.card}
               activeOpacity={0.8}>
               <View style={styles.cardImgWrapper}>

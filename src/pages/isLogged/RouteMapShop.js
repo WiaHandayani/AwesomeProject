@@ -109,7 +109,6 @@ export default function RouteMapShop({navigation, route}) {
         }
       }
     } catch (error) {
-      alert(1);
       console.log('ERRORR :', error);
     }
   };

@@ -9,6 +9,7 @@ import {Image} from 'react-native';
 import {BASE_URL, GMAPS_API} from '../../config';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {ScrollView} from 'react-native';
+import { ImageBackground } from 'react-native';
 
 RNLocation.configure({
   distanceFilter: 5.0,
@@ -104,9 +105,9 @@ export default function Detail({route}) {
             </Animated.View>
           </MapView.Marker>
           <MapView.Marker coordinate={coordinates}>
-            <View style={styles.circle}>
-              <Text style={styles.pinText}> </Text>
-            </View>
+            <ImageBackground style={styles.circle} source={require('../../assets/image/marker.png')}>
+              {/* <Text style={styles.pinText}> </Text> */}
+            </ImageBackground>
           </MapView.Marker>
 
           <MapViewDirections

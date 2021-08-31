@@ -14,6 +14,7 @@ import MapView, {Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import {findNearest} from 'geolib';
 import {BASE_URL, GMAPS_API} from '../../config';
+import { ImageBackground } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 const CARD_HEIGHT = 220;
@@ -178,9 +179,9 @@ export default function RouteMapShop({navigation, route}) {
           );
         })}
         <MapView.Marker coordinate={coordinates}>
-          <View style={styles.circle}>
-            <Text style={styles.pinText}> </Text>
-          </View>
+          <ImageBackground style={styles.circle} source={require('../../assets/image/marker.png')}>
+
+          </ImageBackground>
         </MapView.Marker>
         {closest.hasOwnProperty('latitude') && (
           <MapViewDirections
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 20 / 2,
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
   },
   pinText: {
     color: 'white',

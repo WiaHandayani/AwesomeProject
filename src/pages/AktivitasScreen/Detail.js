@@ -9,7 +9,6 @@ import {Image} from 'react-native';
 import {BASE_URL, GMAPS_API} from '../../config';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {ScrollView} from 'react-native';
-import { ImageBackground } from 'react-native';
 
 RNLocation.configure({
   distanceFilter: 5.0,
@@ -105,9 +104,13 @@ export default function Detail({route}) {
             </Animated.View>
           </MapView.Marker>
           <MapView.Marker coordinate={coordinates}>
-            <ImageBackground style={styles.circle} source={require('../../assets/image/marker.png')}>
-              {/* <Text style={styles.pinText}> </Text> */}
-            </ImageBackground>
+            <Animated.View style={[styles.markerWrap]}>
+              <Animated.Image
+                source={require('../../assets/image/marker.png')}
+                style={styles.marker}
+                resizeMode="cover"
+              />
+            </Animated.View>
           </MapView.Marker>
 
           <MapViewDirections
@@ -186,7 +189,12 @@ export default function Detail({route}) {
               borderColor: colors.gray200,
               paddingVertical: 7,
             }}>
-            <View style={{flexDirection: 'row', flex: 1, maxWidth: Dimensions.get('screen').width / 2.3 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                maxWidth: Dimensions.get('screen').width / 2.3,
+              }}>
               <Text>Nama Pelayanan </Text>
             </View>
             <Text>: </Text>
@@ -201,11 +209,16 @@ export default function Detail({route}) {
               borderColor: colors.gray200,
               paddingVertical: 7,
             }}>
-            <View style={{flexDirection: 'row', flex: 1, maxWidth: Dimensions.get('screen').width / 2.3 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                maxWidth: Dimensions.get('screen').width / 2.3,
+              }}>
               <Text>Harga </Text>
             </View>
             <Text>: </Text>
-            <Text>{'Rp'+item.harga}</Text>
+            <Text>{'Rp' + item.harga}</Text>
           </View>
 
           <View
@@ -216,7 +229,12 @@ export default function Detail({route}) {
               borderColor: colors.gray200,
               paddingVertical: 7,
             }}>
-            <View style={{flexDirection: 'row', flex: 1, maxWidth: Dimensions.get('screen').width / 2.3 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                maxWidth: Dimensions.get('screen').width / 2.3,
+              }}>
               <Text>No. Antrian </Text>
             </View>
             <Text>: </Text>
@@ -231,7 +249,12 @@ export default function Detail({route}) {
               borderColor: colors.gray200,
               paddingVertical: 7,
             }}>
-            <View style={{flexDirection: 'row', flex: 1, maxWidth: Dimensions.get('screen').width / 2.3 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                maxWidth: Dimensions.get('screen').width / 2.3,
+              }}>
               <Text>Tanggal Order </Text>
             </View>
             <Text>: </Text>
@@ -246,11 +269,20 @@ export default function Detail({route}) {
               borderColor: colors.gray200,
               paddingVertical: 7,
             }}>
-            <View style={{flexDirection: 'row', flex: 1, maxWidth: Dimensions.get('screen').width / 2.3 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                maxWidth: Dimensions.get('screen').width / 2.3,
+              }}>
               <Text>Estimasi Waktu</Text>
             </View>
             <Text>: </Text>
-            <Text>{item.estimasi_waktu ? item.estimasi_waktu+ ' Menit' : 'Belum ada estimasi waktu'}</Text>
+            <Text>
+              {item.estimasi_waktu
+                ? item.estimasi_waktu + ' Menit'
+                : 'Belum ada estimasi waktu'}
+            </Text>
           </View>
         </View>
         {/* End Pelayanan  */}

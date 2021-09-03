@@ -14,7 +14,6 @@ import MapView, {Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import {findNearest} from 'geolib';
 import {BASE_URL, GMAPS_API} from '../../config';
-import { ImageBackground } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
 const CARD_HEIGHT = 220;
@@ -136,7 +135,7 @@ export default function RouteMapShop({navigation, route}) {
 
   const onMarkerPress = (mapEventData) => {
     const markerID = mapEventData._targetInst.return.key;
-    setClosest(mapEventData.nativeEvent.coordinate)
+    setClosest(mapEventData.nativeEvent.coordinate);
 
     let x = markerID * CARD_WIDTH + markerID * 20;
     if (Platform.OS === 'ios') {
@@ -179,9 +178,13 @@ export default function RouteMapShop({navigation, route}) {
           );
         })}
         <MapView.Marker coordinate={coordinates}>
-          <ImageBackground style={styles.circle} source={require('../../assets/image/marker.png')}>
-
-          </ImageBackground>
+          <Animated.View style={[styles.markerWrap]}>
+            <Animated.Image
+              source={require('../../assets/image/marker.png')}
+              style={[styles.marker]}
+              resizeMode="cover"
+            />
+          </Animated.View>
         </MapView.Marker>
         {closest.hasOwnProperty('latitude') && (
           <MapViewDirections
@@ -242,7 +245,9 @@ export default function RouteMapShop({navigation, route}) {
               </Text>
               <View style={styles.button}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('DetailBarbershop', {item: marker.item})}
+                  onPress={() =>
+                    navigation.navigate('DetailBarbershop', {item: marker.item})
+                  }
                   style={[
                     styles.signIn,
                     {
@@ -350,6 +355,6 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    marginTop: 5
+    marginTop: 5,
   },
 });

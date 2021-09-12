@@ -73,6 +73,8 @@ export default function RouteMapShop({navigation, route}) {
       let response = await axios.get(BASE_URL + 'api.php?op=list-barber');
       let {data, success} = response.data;
 
+      console.log('BARBER : ', data)
+
       if (success) {
         if (data.length !== 0) {
           let wadah = [],

@@ -20,15 +20,19 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const Salon = ({navigation}) => {
   const [listdata, setlistdata] = useState([]);
   const [foto_profil, setfoto_profil] = useState('');
+  const [nama, setNama] = useState('');
+
   useEffect(() => {
     async function funGetAsyncStorage() {
       let _fotoprofil = await AsyncStorage.getItem('foto_profil');
+      let _nama = await AsyncStorage.getItem('nama');
 
       setfoto_profil(_fotoprofil);
+      setNama(_nama ? _nama : '')
     }
 
     funGetAsyncStorage();
-  }, []);
+  });
   function CariData(value) {
     var urlAksi = BASE_URL + 'api.php?op=cari_salon';
 
@@ -184,6 +188,7 @@ const Salon = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
+        {nama != '' && (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <TouchableOpacity
             onPress={() => navigation.navigate('AktivitasScreen')}>
@@ -193,6 +198,7 @@ const Salon = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
+        )}
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <TouchableOpacity onPress={() => navigation.navigate('Cari')}>
             <Image style={{height: 28, width: 28}} source={cari} />
@@ -201,29 +207,44 @@ const Salon = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
+        {nama != '' && (
+            <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
+                <Image style={{height: 26, width: 26}} source={riwayat} />
+                <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+                  Riwayat
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
-            <Image style={{height: 26, width: 26}} source={riwayat} />
-            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
-              Riwayat
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            {foto_profil != null ? (
-              <Image
-                style={{height: 26, width: 26}}
-                source={{uri: BASE_URL + foto_profil}}
-              />
-            ) : null}
+          <TouchableOpacity onPress={() => navigation.navigate(nama != '' ? 'Profile' : 'signin')}>
+          {nama != '' ? (
+                <>
+              {foto_profil != null ? (
+                <Image
+                  style={{
+                    height: 30,
+                    width: 30,
+                    borderRadius: 50,
+                    resizeMode: 'cover',
+                  }}
+                  source={{uri: BASE_URL + foto_profil}}
+                />
+              ) : null}
 
-            {foto_profil == null ? (
-              <Image style={{height: 26, width: 26}} source={User} />
-            ) : null}
-            <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
-              Akun
-            </Text>
+              {foto_profil == null ? (
+                <Image style={{height: 26, width: 26}} source={User} />
+              ) : null}
+                </>
+              ) : (
+                <FontAwesome5Icon name="sign-in-alt" size={24} color={colors.default} />
+              )}
+
+              <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+                {nama != '' ? 'Akun' : 'Masuk'}
+              </Text>
           </TouchableOpacity>
         </View>
       </View>

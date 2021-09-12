@@ -21,10 +21,21 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 export default function PaketHemat({navigation}) {
   const [refreshing, setRefreshing] = useState(false);
   const [savingPackage, setSavingPackage] = useState([]);
+  const [nama, setNama] = useState('');
 
   useEffect(() => {
     getSavingPackage();
   }, []);
+
+  useEffect(() => {
+    getStorage()
+  })
+
+  const getStorage = async () => {
+    const item = await AsyncStorage.getItem('nama')
+
+    setNama(item ? item : '')
+  }
 
   const getSavingPackage = async () => {
     setRefreshing(true);
@@ -102,7 +113,7 @@ export default function PaketHemat({navigation}) {
         <View key={key + 1}>
           <View style={styles.cardsWrapper}>
             <TouchableOpacity
-              onPress={() => pesanPelayanan(item)}
+              onPress={() => nama != '' ? pesanPelayanan(item) : alert('Mohon Login Terlebih Dahulu')}
               style={styles.card}
               activeOpacity={0.8}>
               <View style={styles.cardImgWrapper}>

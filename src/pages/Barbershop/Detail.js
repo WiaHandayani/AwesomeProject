@@ -15,7 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {colors} from '../../utils';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { RefreshControl } from 'react-native';
 
 export default function Detail({route}) {
@@ -24,13 +24,21 @@ export default function Detail({route}) {
   const [tabBarActive, setTabBarActive] = useState(1);
   const [listPelayanan, setListPelayanan] = useState([]);
   const [listAntrean, setListAntrean] = useState([]);
+  const {setItem: setItemNama, getItem} = useAsyncStorage('nama')
+  const [nama, setNama] = useState('')
 
   useEffect(() => {
+    getNama()
     addVisit()
     getServices();
     getQueues();
     setItem(route.params.item);
   }, []);
+
+  const getNama = async () => {
+    const item = await getItem()
+    setNama(item ? item : '')
+  }
 
   const getQueues = async () => {
     setRefreshing(true)
@@ -309,7 +317,7 @@ export default function Detail({route}) {
     return listPelayanan.length != 0 ? (
       listPelayanan.map((item, key) => (
         <TouchableOpacity
-          onPress={() => pesanPelayanan(item)}
+          onPress={() => nama != '' ? pesanPelayanan(item) : alert('Mohon Login Terlebih Dahulu')}
           activeOpacity={0.8}
           style={styles.wrapperPelayanan}
           key={key}>

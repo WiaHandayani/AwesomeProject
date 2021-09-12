@@ -54,7 +54,7 @@ const Welcome = ({navigation}) => {
         </Text>
         <Text style={styles.text}>Masuk dengan akun</Text>
         <View style={styles.button}>
-          <TouchableOpacity onPress={() => navigation.navigate('signin')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <LinearGradient
               colors={['#4169E1', '#4169E1']}
               style={styles.signIn}>

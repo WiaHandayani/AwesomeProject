@@ -85,15 +85,20 @@ const signup = ({navigation}) => {
             <Text style={styles.color_textPrivate}>
               Dengan mendaftar, Anda menyetujui
             </Text>
-            <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>
-              {' '}
-              Persyaratan Layanan
-            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('KetentuanLayanan')}>
+              <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>
+                {' '}
+                Persyaratan Layanan
+              </Text>
+            </TouchableOpacity>
             <Text style={styles.color_textPrivate}> dan</Text>
-            <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>
-              {' '}
-              Kebijakan Privasi
-            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('KebijakanPrivasi')}>
+              <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>
+                {' '}
+                Kebijakan Privasi
+              </Text>
+            </TouchableOpacity>
             <Text style={styles.color_textPrivate}> kami</Text>
           </View>
           <View style={styles.button}>

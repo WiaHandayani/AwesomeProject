@@ -60,12 +60,12 @@ const Home = ({navigation}) => {
   useEffect(() => {
     async function funGetAsyncStorage() {
       let _nama = await AsyncStorage.getItem('nama');
-  
-      setnama(_nama);
+
+      setnama(_nama ? _nama : '');
     }
 
-    funGetAsyncStorage()
-  }, []);
+    funGetAsyncStorage();
+  });
 
   const [foto_profil, setfoto_profil] = useState('');
   useEffect(() => {
@@ -95,7 +95,7 @@ const Home = ({navigation}) => {
         {headers: {'Content-Type': 'application/x-www-form-urlencoded'}},
       );
 
-      console.log("SUCCESS FETCH LAST VISITED");
+      console.log('SUCCESS FETCH LAST VISITED');
 
       let {success, data} = response.data;
 
@@ -122,7 +122,9 @@ const Home = ({navigation}) => {
   const LastVisit = () => {
     return lastVisited.length ? (
       lastVisited.map((item, key) => (
-        <TouchableOpacity onPress={() => navigation.navigate('DetailBarbershop', {item: item})} key={key}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('DetailBarbershop', {item: item})}
+          key={key}>
           <View style={styles.card}>
             <View style={styles.cardImgWrapper}>
               <Image
@@ -133,7 +135,11 @@ const Home = ({navigation}) => {
             </View>
             <View style={styles.cardInfo}>
               <Text style={styles.cardTitle}>{item.nama_usaha}</Text>
-              <Text style={[styles.cardDetails, {marginTop: 8}]} numberOfLines={3}>{item.alamat}</Text>
+              <Text
+                style={[styles.cardDetails, {marginTop: 8}]}
+                numberOfLines={3}>
+                {item.alamat}
+              </Text>
               {/* <StarRating ratings={4} reviews={99} /> */}
             </View>
           </View>
@@ -169,7 +175,9 @@ const Home = ({navigation}) => {
         <View style={{height: 8}} />
         <Text style={styles.text_header}>GetHaircut Application</Text>
         <View style={{height: 4}} />
-        <Text style={styles.text_header2}>Hai, {nama}!</Text>
+        <Text style={styles.text_header2}>
+          Hai, {nama ? nama : 'Pengunjung'}!
+        </Text>
         <View
           style={{
             marginHorizontal: 17,
@@ -301,12 +309,16 @@ const Home = ({navigation}) => {
             </TouchableOpacity> */}
           </View>
           <View style={[styles.categoryContainer, {marginTop: 10}]}>
-            <TouchableOpacity style={styles.categoryBtn} onPress={() => navigation.navigate('SeringDilihat')}>
-              <View style={styles.categoryIcon}>
-                <Image source={mata} style={{width: 50, height: 50}} />
-              </View>
-              <Text style={styles.categoryBtnTxt}>Sering Dilihat</Text>
-            </TouchableOpacity>
+            {nama != '' && (
+              <TouchableOpacity
+                style={styles.categoryBtn}
+                onPress={() => navigation.navigate('SeringDilihat')}>
+                <View style={styles.categoryIcon}>
+                  <Image source={mata} style={{width: 50, height: 50}} />
+                </View>
+                <Text style={styles.categoryBtnTxt}>Sering Dilihat</Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
               style={styles.categoryBtn}
               onPress={() => navigation.navigate('PaketHemat')}>
@@ -322,20 +334,23 @@ const Home = ({navigation}) => {
               <Text style={styles.categoryBtnTxt}>Lihat Lainnya</Text>
             </TouchableOpacity> */}
           </View>
-          <View style={{height: 12}} />
-          <View style={styles.cardsWrapper}>
-            <Text
-              style={{
-                alignSelf: 'center',
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: '#333',
-              }}>
-              Terakhir dikunjungi
-            </Text>
 
-            <LastVisit />
-          </View>
+          <View style={{height: nama != '' ? 12 : 100}} />
+          {nama != '' && (
+            <View style={styles.cardsWrapper}>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#333',
+                }}>
+                Terakhir dikunjungi
+              </Text>
+
+              <LastVisit />
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -356,16 +371,18 @@ const Home = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('AktivitasScreen')}>
-              <Image style={{height: 26, width: 26}} source={Aktivitas} />
-              <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
-                Aktivitas
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {nama != '' && (
+            <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('AktivitasScreen')}>
+                <Image style={{height: 26, width: 26}} source={Aktivitas} />
+                <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+                  Aktivitas
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <TouchableOpacity onPress={() => navigation.navigate('Cari')}>
@@ -375,31 +392,51 @@ const Home = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </View>
+          {nama != '' && (
+            <View
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
+                <Image style={{height: 26, width: 26}} source={riwayat} />
+                <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
+                  Riwayat
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <TouchableOpacity onPress={() => navigation.navigate('Riwayat')}>
-              <Image style={{height: 26, width: 26}} source={riwayat} />
-              <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
-                Riwayat
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-              {foto_profil != null ? (
-                <Image
-                  style={{height: 30, width: 30, borderRadius: 50, resizeMode: 'cover'}}
-                  source={{uri: BASE_URL + foto_profil}}
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(nama != '' ? 'Profile' : 'signin')
+              }>
+              {nama != '' ? (
+                <>
+                  {foto_profil != null ? (
+                    <Image
+                      style={{
+                        height: 30,
+                        width: 30,
+                        borderRadius: 50,
+                        resizeMode: 'cover',
+                      }}
+                      source={{uri: BASE_URL + foto_profil}}
+                    />
+                  ) : null}
+
+                  {foto_profil == null ? (
+                    <Image style={{height: 26, width: 26}} source={User} />
+                  ) : null}
+                </>
+              ) : (
+                <FontAwesome5Icon
+                  name="sign-in-alt"
+                  size={24}
+                  color={colors.default}
                 />
-              ) : null}
-
-              {foto_profil == null ? (
-                <Image style={{height: 26, width: 26}} source={User} />
-              ) : null}
+              )}
 
               <Text style={{fontSize: 12, color: '#545454', marginTop: 4}}>
-                Akun
+                {nama != '' ? 'Akun' : 'Masuk'}
               </Text>
             </TouchableOpacity>
           </View>

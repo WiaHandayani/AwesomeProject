@@ -7,7 +7,8 @@ const Auth = ({navigation}) => {
   useEffect(() => {
     const isLogin = () => {
       AsyncStorage.getItem('nama').then((data) => {
-        navigation.navigate(data ? 'Home' : 'welcome');
+        navigation.replace('Home');
+        // alert(data)
       });
     };
 
@@ -22,5 +23,3 @@ const Auth = ({navigation}) => {
 };
 
 export default Auth;
-
-const styles = StyleSheet.create({});

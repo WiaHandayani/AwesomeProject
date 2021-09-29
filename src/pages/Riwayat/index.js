@@ -16,11 +16,20 @@ import {Aktivitas, HomeIcon, riwayat, User, cari, Search} from '../../assets';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from '../../config';
 import axios from 'axios';
+import moment from 'moment';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
 
 const Riwayat = ({navigation}) => {
   const [foto_profil, setfoto_profil] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [activity, setHistory] = useState([]);
+  const [showFromDate, setShowFromDate] = useState(false);
+  const [showToDate, setShowToDate] = useState(false);
+
+   //
+  const [fromDate, setFromDate] = useState(moment().subtract(7,'d').format('YYYY-MM-DD'));
+  const [toDate, setToDate] = useState(moment().format('YYYY-MM-DD'));
 
   useEffect(() => {
     getActivity();
@@ -38,16 +47,18 @@ const Riwayat = ({navigation}) => {
         .join('&');
 
       let response = await axios.post(
-        BASE_URL + 'api.php?op=history_order',
+        BASE_URL + `api.php?op=history_order&from=${fromDate}&to=${toDate}`,
         formData,
         {headers: {'Content-Type': 'application/x-www-form-urlencoded'}},
       );
 
-      console.log(response.data, formData);
-
+      
       let {success, data} = response.data;
 
+      console.log("ERR : ", response.data);
+      
       if (success) {
+        console.log("DATA : ", data);
         setHistory(data);
       }
       setRefreshing(false);
@@ -85,6 +96,90 @@ const Riwayat = ({navigation}) => {
             </Text>
           </View>
           <View style={{height: 12}} />
+
+          
+          <View style={styles.wrapFilter}>
+            {/* <View style={{marginBottom: 10}}>
+              <Text
+                style={[
+                  styles.titleListPelayanan,
+                  {textTransform: 'uppercase'},
+                ]}>
+                Filter
+              </Text>
+            </View> */}
+            <View style={styles.containerFilter}>
+              <View>
+                <Text
+                  style={[
+                    styles.titleListPelayanan,
+                    {
+                      textTransform: 'uppercase',
+                      fontSize: 13,
+                      fontFamily: 'OpenSans-Regular',
+                      paddingBottom: 4,
+                    },
+                  ]}>
+                  Dari tanggal
+                </Text>
+                <TouchableOpacity
+                  style={styles.btnFilter}
+                  onPress={() => setShowFromDate(true)}>
+                  <Text style={styles.titleListPelayanan}>
+                    {fromDate}
+                  </Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={showFromDate}
+                  mode="date"
+                  display={'spinner'}
+                  value={fromDate}
+                  onConfirm={(date) => {
+                    setFromDate(moment(date).format('YYYY-MM-DD'))
+                    setShowFromDate(false)
+                  }}
+                  onCancel={() => setShowFromDate(false)}
+                />
+              </View>
+              <View>
+                <Text
+                  style={[
+                    styles.titleListPelayanan,
+                    {
+                      textTransform: 'uppercase',
+                      fontSize: 13,
+                      fontFamily: 'OpenSans-Regular',
+                      paddingBottom: 4,
+                    },
+                  ]}>
+                  Ke tanggal
+                </Text>
+                <TouchableOpacity style={styles.btnFilter} onPress={() => setShowToDate(true)}>
+                  <Text style={styles.titleListPelayanan}>
+                    {toDate}
+                  </Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                  isVisible={showToDate}
+                  mode="date"
+                  display={'spinner'}
+                  value={toDate}
+                  onConfirm={(date) => {
+                    setToDate(moment(date).format('YYYY-MM-DD'))
+                    setShowToDate(false)
+                  }}
+                  onCancel={() => setShowToDate(false)}
+                />
+              </View>
+              <View>
+                <TouchableOpacity style={styles.btnSubmitFilter} onPress={() => getActivity()}>
+                  {/* <Feather name="search" size={18} color={colors.white} /> */}
+                  <Text>Cari</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+
 
           {/* Card */}
           {activity.length > 0 
@@ -177,7 +272,7 @@ const Riwayat = ({navigation}) => {
             (
               <View style={{  flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 30 }}>
                 <MaterialCommunityIcons name="view-list" size={70} color={colors.gray500} />
-                <Text style={{  fontSize: 16, color: colors.gray500, textTransform: 'uppercase', fontWeight: '700' }}>Belum ada riwayat</Text>
+                <Text style={{  fontSize: 16, color: colors.gray500, textTransform: 'uppercase', fontWeight: '700' }}> Belum ada riwayat</Text>
               </View>
             )
           }
@@ -334,5 +429,35 @@ const styles = StyleSheet.create({
   cardDetails: {
     fontSize: 12,
     color: '#4169E1',
+  },
+  //
+  wrapFilter: {
+    flex: 1,
+    // flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 27,
+    marginBottom: 8,
+  },
+  containerFilter: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  btnFilter: {
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: colors.white,
+    elevation: 1,
+    marginRight: 4,
+  },
+  btnSubmitFilter: {
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 5,
+    backgroundColor: colors.blue500,
   },
 });

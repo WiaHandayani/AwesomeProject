@@ -6,8 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Auth = ({navigation}) => {
   useEffect(() => {
     const isLogin = () => {
+      navigation.replace('Home');
       AsyncStorage.getItem('nama').then((data) => {
-        navigation.replace('Home');
         // alert(data)
       });
     };
